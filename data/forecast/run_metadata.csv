@@ -1,0 +1,2 @@
+Input_File,Sheet,Forecast_Horizon_Months,History_Start,History_End,SKU_Count,Selection_Metric,Generated_At_UTC
+data/Demand_Genie_Synthetic_Demand_History.xlsx,Demand_Data,12,2023-07-01,2026-06-01,80,Holdout RMSE at requested horizon,2026-07-21 12:45:42 UTC

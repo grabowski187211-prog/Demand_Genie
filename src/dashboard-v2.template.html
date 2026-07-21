@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Demand Genie version 2 is a standalone demand forecasting and DDMRP planning workbench.">
+  <title>Demand Genie V2 | Planning Workbench</title>
+  <style>
+/* __DASHBOARD_STYLES__ */
+  </style>
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="brand-block">
+        <div class="brand-line">
+          <span class="brand-mark" aria-hidden="true">DG</span>
+          <div>
+            <p class="eyebrow">Demand Genie / Planning Workbench</p>
+            <h1>Demand Genie <span>Version 2</span></h1>
+          </div>
+        </div>
+        <p class="header-summary" id="header-summary">Daily replenishment priorities, forecast evidence, and execution risk in one planning flow.</p>
+      </div>
+      <div class="header-actions">
+        <div class="source-state">
+          <span id="source-kind">Embedded synthetic demo</span>
+          <strong id="source-file">Demand_Genie_Synthetic_Demand_History.xlsx</strong>
+          <small id="source-freshness">Snapshot 2026-07-21</small>
+        </div>
+        <input id="workbook-input" type="file" accept=".xlsx,.xls,.xlsb" hidden>
+        <button class="command primary" id="upload-button" type="button">Load workbook</button>
+        <a class="command" href="index.html">Open version 1</a>
+      </div>
+    </header>
+
+    <nav class="view-tabs" role="tablist" aria-label="Planning views">
+      <button class="tab active" type="button" role="tab" aria-selected="true" data-view="planning">Replenishment</button>
+      <button class="tab" type="button" role="tab" aria-selected="false" data-view="forecast">Forecast</button>
+      <button class="tab" type="button" role="tab" aria-selected="false" data-view="execution">Execution</button>
+      <button class="tab" type="button" role="tab" aria-selected="false" data-view="buffers">Buffers</button>
+      <button class="tab" type="button" role="tab" aria-selected="false" data-view="data">Data</button>
+    </nav>
+
+    <section class="filter-band" aria-label="Dashboard filters">
+      <div class="control">
+        <label for="group-filter">Product group</label>
+        <select id="group-filter"><option value="All">All groups</option></select>
+      </div>
+      <div class="control">
+        <label for="location-filter">Location</label>
+        <select id="location-filter"><option value="All">All locations</option></select>
+      </div>
+      <div class="control">
+        <label for="status-filter">Net-flow status</label>
+        <select id="status-filter">
+          <option value="All">All statuses</option>
+          <option value="Black">Black</option>
+          <option value="Red">Red</option>
+          <option value="Yellow">Yellow</option>
+          <option value="Green">Green</option>
+          <option value="Blue">Blue</option>
+        </select>
+      </div>
+      <div class="control search-control">
+        <label for="search-filter">SKU or description</label>
+        <input id="search-filter" type="search" placeholder="Filter positions">
+      </div>
+      <div class="control scenario-control">
+        <label>Buffer scenario</label>
+        <div class="segmented" id="scenario-control" aria-label="Buffer scenario">
+          <button type="button" class="active" data-scenario="baseline" aria-pressed="true">Approved</button>
+          <button type="button" data-scenario="forecast" aria-pressed="false">Forecast proposal</button>
+        </div>
+      </div>
+      <p class="context-note" id="filter-context">80 buffered positions | 2026-07-21</p>
+    </section>
+
+    <div class="data-alert" id="data-alert" role="alert" hidden></div>
+
+    <section class="view active" id="view-planning" role="tabpanel">
+      <section class="metric-strip" aria-label="Replenishment summary">
+        <div class="attention-message">
+          <p class="section-kicker">Planner attention</p>
+          <h2 id="planning-headline">Critical replenishment signals require review.</h2>
+          <p id="planning-subline">Positions are ranked by net-flow status and buffer penetration.</p>
+        </div>
+        <div class="metric">
+          <p class="metric-label">Black + red</p>
+          <strong id="critical-count">0</strong>
+          <span id="critical-context">of 0 positions</span>
+        </div>
+        <div class="metric">
+          <p class="metric-label">Release quantity</p>
+          <strong id="release-quantity">0</strong>
+          <span id="release-context">units proposed</span>
+        </div>
+        <div class="metric">
+          <p class="metric-label">Execution risk</p>
+          <strong id="execution-risk-count">0</strong>
+          <span>on-hand or late-supply reviews</span>
+        </div>
+      </section>
+
+      <div class="workbench-grid">
+        <section class="work-panel priority-panel" aria-labelledby="priority-title">
+          <div class="panel-head">
+            <div>
+              <p class="section-kicker">Daily priority queue</p>
+              <h2 id="priority-title">Supply recommendations</h2>
+            </div>
+            <button class="command compact" id="export-plan" type="button">Export recommendations</button>
+          </div>
+          <div class="table-wrap planning-table-wrap">
+            <table class="planning-table">
+              <thead>
+                <tr>
+                  <th scope="col">Status</th>
+                  <th scope="col">Item</th>
+                  <th scope="col">Net flow within buffer</th>
+                  <th scope="col">On hand</th>
+                  <th scope="col">Open supply</th>
+                  <th scope="col">Qualified demand</th>
+                  <th scope="col">Recommend</th>
+                  <th scope="col">Available</th>
+                </tr>
+              </thead>
+              <tbody id="planning-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <aside class="work-panel detail-panel" id="planning-detail" aria-live="polite"></aside>
+      </div>
+    </section>
+
+    <section class="view" id="view-forecast" role="tabpanel" hidden>
+      <section class="view-controls" aria-label="Forecast controls">
+        <div class="control sku-control">
+          <label for="forecast-sku">Forecast item</label>
+          <select id="forecast-sku"></select>
+        </div>
+        <div class="control">
+          <label for="forecast-model">Model</label>
+          <select id="forecast-model">
+            <option value="Auto">Automatic winner</option>
+            <option value="Mean">Mean</option>
+            <option value="Naive">Naive</option>
+            <option value="Drift">Drift</option>
+            <option value="Seasonal_Naive">Seasonal naive</option>
+            <option value="ETS">ETS</option>
+          </select>
+        </div>
+        <div class="control">
+          <label>Horizon</label>
+          <div class="segmented" id="horizon-control" aria-label="Forecast horizon">
+            <button type="button" data-horizon="3" aria-pressed="false">3 months</button>
+            <button type="button" class="active" data-horizon="6" aria-pressed="true">6 months</button>
+            <button type="button" data-horizon="12" aria-pressed="false">12 months</button>
+          </div>
+        </div>
+        <p class="context-note" id="forecast-source-note">R fpp3 holdout validation</p>
+      </section>
+
+      <section class="metric-strip compact-strip" aria-label="Forecast diagnostics">
+        <div class="attention-message">
+          <p class="section-kicker">Selected forecast</p>
+          <h2 id="forecast-headline">Model selected on withheld demand.</h2>
+          <p id="forecast-subline">Point forecast and uncertainty remain separate from qualified demand.</p>
+        </div>
+        <div class="metric"><p class="metric-label">Selected model</p><strong id="selected-model">-</strong><span id="model-context">Automatic</span></div>
+        <div class="metric"><p class="metric-label">Holdout RMSE</p><strong id="forecast-rmse">-</strong><span>units</span></div>
+        <div class="metric"><p class="metric-label">Holdout bias</p><strong id="forecast-bias">-</strong><span>mean error</span></div>
+      </section>
+
+      <div class="forecast-grid">
+        <section class="work-panel chart-panel">
+          <div class="panel-head">
+            <div>
+              <p class="section-kicker">Demand history and forecast</p>
+              <h2 id="forecast-chart-title">Selected item</h2>
+            </div>
+            <div class="chart-legend" aria-label="Forecast chart legend">
+              <span><i class="line-key actual"></i>Actual</span>
+              <span><i class="line-key forecast"></i>Forecast</span>
+              <span><i class="interval-key"></i>80% / 95%</span>
+            </div>
+          </div>
+          <div class="chart-wrap">
+            <svg id="forecast-chart" role="img" aria-label="Demand history, forecast, and prediction intervals"></svg>
+            <div class="chart-tooltip" id="forecast-tooltip"></div>
+          </div>
+        </section>
+
+        <section class="work-panel model-panel">
+          <div class="panel-head">
+            <div>
+              <p class="section-kicker">Genuine forecast evaluation</p>
+              <h2>Model comparison</h2>
+            </div>
+          </div>
+          <div class="model-comparison" id="model-comparison"></div>
+        </section>
+      </div>
+
+      <section class="work-panel adjustment-panel">
+        <div class="panel-head">
+          <div>
+            <p class="section-kicker">Dynamic buffer proposal</p>
+            <h2>Forecast-derived ADU adjustments</h2>
+          </div>
+          <button class="command compact" id="export-forecast" type="button">Export forecast</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Month</th><th>Point forecast</th><th>95% interval</th><th>Forecast ADU</th><th>Baseline ADU</th><th>Proposed factor</th><th>Effective from</th><th>Status</th></tr></thead>
+            <tbody id="adjustment-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <section class="view" id="view-execution" role="tabpanel" hidden>
+      <section class="metric-strip compact-strip" aria-label="Execution summary">
+        <div class="attention-message">
+          <p class="section-kicker">Visible and collaborative execution</p>
+          <h2 id="execution-headline">Open supply requiring intervention.</h2>
+          <p>Execution status uses on-hand and receipt timing, separately from net-flow order generation.</p>
+        </div>
+        <div class="metric"><p class="metric-label">Late receipts</p><strong id="late-count">0</strong><span>open supply lines</span></div>
+        <div class="metric"><p class="metric-label">On-hand at/below TOR</p><strong id="onhand-risk-count">0</strong><span>buffer positions</span></div>
+        <div class="metric"><p class="metric-label">Open supply</p><strong id="open-supply-total">0</strong><span>units</span></div>
+      </section>
+      <section class="work-panel">
+        <div class="panel-head"><div><p class="section-kicker">Synchronization queue</p><h2>Open orders ranked by execution risk</h2></div></div>
+        <div class="table-wrap execution-table-wrap">
+          <table>
+            <thead><tr><th>Risk</th><th>Order</th><th>SKU</th><th>Location</th><th>Type</th><th>Open units</th><th>Expected receipt</th><th>Status</th><th>Source</th><th>Synchronization note</th></tr></thead>
+            <tbody id="execution-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <section class="view" id="view-buffers" role="tabpanel" hidden>
+      <div class="workbench-grid buffer-grid">
+        <section class="work-panel priority-panel">
+          <div class="panel-head"><div><p class="section-kicker">Master settings</p><h2>Approved buffer configuration</h2></div></div>
+          <div class="table-wrap buffer-table-wrap">
+            <table>
+              <thead><tr><th>SKU</th><th>Profile</th><th>ADU</th><th>DLT</th><th>LTF</th><th>VF</th><th>MOQ</th><th>Cycle</th><th>Adjustment</th><th>Approval</th></tr></thead>
+              <tbody id="buffer-body"></tbody>
+            </table>
+          </div>
+        </section>
+        <aside class="work-panel detail-panel" id="buffer-detail" aria-live="polite"></aside>
+      </div>
+    </section>
+
+    <section class="view" id="view-data" role="tabpanel" hidden>
+      <section class="metric-strip compact-strip" aria-label="Data summary">
+        <div class="attention-message">
+          <p class="section-kicker">Data readiness</p>
+          <h2 id="data-headline">Workbook is complete for forecasting and DDMRP.</h2>
+          <p id="data-subline">Required source classes remain separate and auditable.</p>
+        </div>
+        <div class="metric"><p class="metric-label">Demand records</p><strong id="demand-record-count">0</strong><span>SKU-months</span></div>
+        <div class="metric"><p class="metric-label">Buffered positions</p><strong id="position-count">0</strong><span>SKU-locations</span></div>
+        <div class="metric"><p class="metric-label">Forecast coverage</p><strong id="forecast-coverage">0</strong><span>SKUs validated</span></div>
+      </section>
+      <div class="data-grid">
+        <section class="work-panel">
+          <div class="panel-head"><div><p class="section-kicker">Workbook contract</p><h2>Loaded sheets and row counts</h2></div></div>
+          <div class="table-wrap">
+            <table><thead><tr><th>Sheet</th><th>Purpose</th><th>Rows</th><th>Status</th></tr></thead><tbody id="sheet-body"></tbody></table>
+          </div>
+        </section>
+        <section class="work-panel audit-panel">
+          <div class="panel-head">
+            <div><p class="section-kicker">Planner governance</p><h2>Session action log</h2></div>
+            <button class="command compact" id="export-audit" type="button">Export log</button>
+          </div>
+          <div class="table-wrap">
+            <table><thead><tr><th>Time</th><th>SKU</th><th>Action</th><th>Quantity</th><th>Reason</th></tr></thead><tbody id="audit-body"></tbody></table>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <footer class="footer-bar">
+      <p>Demand Genie V2 | Standalone planning workbook | Statistical forecasts, targets, and released orders remain separate.</p>
+      <p id="engine-state">Forecast engine: R fpp3 1.0.2</p>
+    </footer>
+  </main>
+
+  <dialog id="action-dialog">
+    <form method="dialog" id="action-form">
+      <div class="dialog-head">
+        <p class="section-kicker">Planner decision</p>
+        <h2 id="dialog-title">Confirm recommendation</h2>
+      </div>
+      <div class="dialog-summary" id="dialog-summary"></div>
+      <label for="action-reason">Reason</label>
+      <textarea id="action-reason" rows="3" required></textarea>
+      <div class="dialog-actions">
+        <button class="command" value="cancel" type="button" id="dialog-cancel">Cancel</button>
+        <button class="command primary" value="confirm" type="submit">Confirm</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+/* __SHEETJS_LIBRARY__ */
+  </script>
+  <script>
+    const SAMPLE_DATA = __SAMPLE_DATA__;
+  </script>
+  <script>
+/* __DASHBOARD_APPLICATION__ */
+  </script>
+</body>
+</html>
