@@ -25,6 +25,15 @@ This file tracks timestamped project work for OpenAI Build Week.
 - Included a tidy `Demand_Data` upload sheet with 2,880 monthly records, plus a business-friendly demand matrix, product master, and data dictionary.
 - Validated product-group count, SKU count, monthly coverage, and positive demand values after workbook generation.
 
+## 2026-07-21 15:55 CEST
+
+- Preserved `index.html` and `dashboard-v2.html` as the first two working iterations.
+- Extended the synthetic workbook with 1,964 signed procurement lines, 38 normalized supplier parents, 20 contracts, category taxonomy, explicit commercial-risk factors, an EUR control total, and a separate demand-history fact for item segmentation.
+- Verified that the original `Demand_Data` and `DDMRP_Recommendations` outputs remained unchanged while adding the commercial data model.
+- Ran the reusable `spend-analysis` workflow. The analysis reconciled exactly to EUR 143,686,430.21, passed all blocking data-quality gates, and produced supplier/category Pareto, contract, concentration, Kraljic, and ABC/XYZ plus ADI/CV2 outputs.
+- Built `dashboard-v3.html` as a standalone seven-view supply-chain workbench with dynamic commercial filters, spend and supplier Pareto analysis, review prompts with no savings claim, a Kraljic bubble portfolio, and modern item segmentation.
+- Added repeatable workbook and Playwright tests. Version 3 passed desktop and mobile browser verification with workbook re-upload, export, interaction, chart-rendering, console-error, and page-overflow checks.
+
 ## Codex Collaboration Notes
 
 Add entries here as major features are designed and built. Include:

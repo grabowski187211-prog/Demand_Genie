@@ -1,0 +1,39 @@
+{
+  "generated_at_utc": "2026-07-21T13:52:24.663010+00:00",
+  "input": "data/Demand_Genie_Synthetic_Demand_History.xlsx",
+  "spend_sheet": "Spend_Lines",
+  "demand_source": "data/Demand_Genie_Synthetic_Demand_History.xlsx",
+  "demand_sheet": "Demand_History",
+  "analysis_status": "READY_WITH_REVIEW",
+  "failed_quality_checks": [],
+  "basis": {
+    "reconciliation": "signed net Spend_Base",
+    "pareto": "gross positive Spend_Base; crossing item remains in the lower class",
+    "supplier_entity": "parent, else normalized entity, else raw supplier"
+  },
+  "thresholds": {
+    "abc_a": 0.8,
+    "abc_b": 0.95,
+    "xyz_x_cv": 0.5,
+    "xyz_y_cv": 1.0,
+    "adi": 1.32,
+    "cv2": 0.49,
+    "kraljic": 50.0,
+    "fragmented_supplier_count": 5,
+    "concentration_share": 0.8
+  },
+  "outputs": [
+    "category_summary.csv",
+    "data_quality.csv",
+    "item_segmentation.csv",
+    "monthly_spend.csv",
+    "opportunity_flags.csv",
+    "spend_summary.csv",
+    "supplier_summary.csv"
+  ],
+  "notes": [
+    "Opportunity flags are review prompts and contain no savings estimate.",
+    "Kraljic scores are aggregated only from supplied 0-100 evidence fields.",
+    "XYZ and ADI/CV2 require complete demand periods; missing periods are not treated as zero."
+  ]
+}

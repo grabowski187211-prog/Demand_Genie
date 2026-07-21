@@ -24,42 +24,64 @@ The Devpost submission requires:
 - Setup instructions, sample data if needed, and clear run instructions in this README.
 - A `/feedback` Codex Session ID for the project thread where most core functionality was built.
 
-## Development
+## Dashboards
 
-The current MVP is a dependency-free, interactive dashboard in [index.html](index.html). It runs locally without a build step or server:
+Each iteration remains available as a standalone HTML file:
 
-1. Open `index.html` in a modern browser.
-2. Use the product-family, part, and forecast-model controls to change the monitoring view.
-3. Select a row in the exception queue to inspect that part's historical demand and forecast context.
-4. Download the current exception queue as CSV when needed.
+- [Version 1](index.html): demand-monitoring MVP.
+- [Version 2](dashboard-v2.html): forecasting and DDMRP planning workbench.
+- [Version 3](dashboard-v3.html): forecasting, DDMRP, procurement spend, supplier exposure, Kraljic strategy, and modern item segmentation.
 
-The dashboard currently uses deterministic sample manufacturing data embedded in the file. It is intentionally structured so an ERP or planning-system extract can replace the sample dataset in a later iteration.
+Open `dashboard-v3.html` directly in a modern browser. No application server or network connection is required. Load the sample Excel workbook from the dashboard to exercise the same upload path used for an ERP or procurement extract.
+
+Version 3 includes seven operational views: Replenishment, Forecast, Spend, Portfolio, Execution, Buffers, and Data. Commercial exports are review queues and do not claim booked savings.
 
 ## Sample Data
 
-[Demand_Genie_Synthetic_Demand_History.xlsx](data/Demand_Genie_Synthetic_Demand_History.xlsx) contains 36 complete months of synthetic manufacturing demand history, covering July 2023 through June 2026.
+[Demand_Genie_Synthetic_Demand_History.xlsx](data/Demand_Genie_Synthetic_Demand_History.xlsx) contains deterministic synthetic planning and procurement data. No row represents a real product, supplier, contract, or transaction.
 
 - 10 product groups with 8 SKUs each.
-- 2,880 tidy monthly demand records in the `Demand_Data` sheet. This is the intended dashboard-upload sheet.
-- A wide `Demand_Matrix` sheet, product master, data dictionary, and workbook notes for inspection.
-- Deterministic demand patterns with trend, seasonality, volatility, shocks, and intermittent behavior. No row represents real products or customers.
+- 2,880 monthly demand records from July 2023 through June 2026.
+- 80 complete DDMRP item-location positions with inventory, open supply, qualified demand, order rules, buffer settings, and recommendations.
+- 1,964 signed procurement lines from July 2024 through June 2026, including visible credits.
+- 38 normalized supplier parents, 20 active contracts, an approved category taxonomy, and category-level commercial risk evidence.
+- A separate `Demand_History` consumption fact for usage-value ABC/XYZ and Syntetos-Boylan ADI/CV2 analysis. Purchase orders are not treated as demand.
+- A `Spend_Control` sheet that reconciles signed net spend in EUR to the synthetic AP control total.
 
-Regenerate the workbook with:
+### Rebuild and Validate
+
+The workbook requires Python and `openpyxl`. Regenerate and validate it with:
 
 ```bash
 python3 scripts/generate_synthetic_demand_data.py
+python3 scripts/analyze_spend.py data/Demand_Genie_Synthetic_Demand_History.xlsx data/spend-analysis --control-total 143686430.21
+python3 scripts/validate_workbook_v3.py
+```
+
+Build the self-contained dashboard after changing source files or data:
+
+```bash
+python3 scripts/build_dashboard_v3.py
+```
+
+Optional browser verification requires Python Playwright with Chromium and a local server:
+
+```bash
+python3 -m http.server 8001
+python3 scripts/test_dashboard_v3.py http://localhost:8001/dashboard-v3.html
 ```
 
 ### Dashboard Design
 
-The dashboard follows the monitoring and visual-communication principles of Stephen Few's *Information Dashboard Design*:
+The dashboards follow the monitoring and visual-communication principles of Stephen Few's *Information Dashboard Design*:
 
 - A single desktop-screen overview for rapid monitoring.
 - Context-rich comparisons rather than isolated KPI tiles.
 - Line charts for time, compact forecast comparisons, and a ranked exception queue for follow-up work.
 - Flat, restrained visual treatment with color reserved for meaningful planning signals.
+- Ranked spend bars with a Pareto line, a true Kraljic bubble scatter, explicit review queues, and visible data-reconciliation status.
 
-The reusable Codex skill `few-dashboard` contains the implementation workflow and primary-source research notes used for these choices.
+The reusable Codex skills `few-dashboard`, `fpp3`, `ddmrp`, and `spend-analysis` contain the implementation workflows used for these choices.
 
 ## Build Log
 

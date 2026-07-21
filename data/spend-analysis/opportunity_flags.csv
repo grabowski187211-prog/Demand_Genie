@@ -1,0 +1,15 @@
+Scope_Type,Scope,Flag,Evidence,Positive_Spend,Savings_Claim
+Category,Electric Drives,Contract leakage review,On-contract share of known spend 63.5%,26650835.16,None - validate eligibility and cause
+Category,Packaging Equipment,Contract leakage review,On-contract share of known spend 61.4%,21058063.8,None - validate eligibility and cause
+Category,Packaging Equipment,Supplier concentration review,Top supplier share 88.9%,21058063.8,None - assess continuity and market structure
+Category,Gearbox Components,Contract leakage review,On-contract share of known spend 78.5%,14734288.67,None - validate eligibility and cause
+Category,Control Valves,Contract leakage review,On-contract share of known spend 47.7%,14453751.14,None - validate eligibility and cause
+Category,Sensor Modules,Contract leakage review,On-contract share of known spend 77.0%,14144760.57,None - validate eligibility and cause
+Category,Sensor Modules,Supplier concentration review,Top supplier share 86.3%,14144760.57,None - assess continuity and market structure
+Category,Industrial Bearings,Contract leakage review,On-contract share of known spend 65.5%,9592454.78,None - validate eligibility and cause
+Category,Conveying Components,Contract leakage review,On-contract share of known spend 55.6%,9297192.2,None - validate eligibility and cause
+Category,Conveying Components,Supplier fragmentation review,5 suppliers,9297192.2,None - validate addressability
+Category,Sealing Systems,Contract leakage review,On-contract share of known spend 34.6%,5466221.53,None - validate eligibility and cause
+Category,Sealing Systems,Supplier fragmentation review,6 suppliers,5466221.53,None - validate addressability
+Category,Fastening Kits,Contract leakage review,On-contract share of known spend 31.9%,4542798.64,None - validate eligibility and cause
+Category,Fastening Kits,Supplier fragmentation review,7 suppliers,4542798.64,None - validate addressability
