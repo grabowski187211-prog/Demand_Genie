@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Demand Genie V4 — Video Narration</title>
+  <style>
+    @page { size: A4; margin: 18mm 17mm; }
+    :root { --ink: #17262b; --muted: #51676c; --accent: #216b78; --line: #cfd9da; --cue: #edf4f4; }
+    * { box-sizing: border-box; }
+    body { color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; font-size: 10.8pt; line-height: 1.45; margin: 0; }
+    h1 { font-size: 24pt; line-height: 1.1; letter-spacing: -0.02em; margin: 0 0 3mm; }
+    h2 { font-size: 13pt; margin: 8mm 0 3mm; }
+    p { margin: 0 0 3.5mm; }
+    .eyebrow { color: var(--accent); font-size: 8.7pt; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .subtitle { color: var(--muted); font-size: 12pt; margin-bottom: 7mm; }
+    .meta { background: #f4f7f7; border-left: 4px solid var(--accent); margin: 0 0 7mm; padding: 3.5mm 4mm; }
+    .meta strong { color: var(--accent); }
+    .cue { background: var(--cue); border: 1px solid #d6e4e4; color: #1d5059; font-size: 9.7pt; font-weight: 700; margin: 5mm 0 2.5mm; padding: 2.3mm 3mm; }
+    .spoken { margin-bottom: 4mm; }
+    .note { color: var(--muted); font-size: 9.4pt; margin-top: 6mm; }
+    .footer { border-top: 1px solid var(--line); color: var(--muted); font-size: 8.5pt; margin-top: 8mm; padding-top: 3mm; }
+  </style>
+</head>
+<body>
+  <p class="eyebrow">Demand Genie / OpenAI Build Week</p>
+  <h1>Version 4 Video Narration</h1>
+  <p class="subtitle">Teleprompter script for the Demand Genie V4 product demo.</p>
+
+  <div class="meta"><strong>Target duration:</strong> approximately 2 minutes 40 seconds.<br>
+  Bracketed lines are on-screen cues and are not spoken.</div>
+
+  <div class="cue">[Start on Replenishment.]</div>
+  <p class="spoken">Most planners know this feeling. The forecast is in one screen. Inventory is in another. Open orders are somewhere else. And spend data sits in a separate report.</p>
+  <p class="spoken">The numbers exist, but the reason for a decision is often hard to see. Demand Genie changes that. It brings the relevant evidence together, so a planner can see what needs attention, understand why, and decide what to do next.</p>
+
+  <div class="cue">[Show the replenishment summary and select BRG-01.]</div>
+  <p class="spoken">Let’s start with replenishment. Right away, I can see the items that need attention: critical net-flow positions, order proposals, and execution risks.</p>
+  <p class="spoken">I can select any item and see the logic behind the recommendation. For this item, the net-flow position is built from usable on-hand inventory, eligible open supply, and qualified demand. The buffer zones are visible. The demand-adjustment factor is visible. And the recommended order quantity and availability date are visible.</p>
+  <p class="spoken">Importantly, forecast demand is not quietly mixed into qualified demand. The planner can see what drives the signal.</p>
+  <p class="spoken">This is not an automatic release engine. The planner can release the recommendation, or hold it for review, add a reason, and record the decision in the session log. The tool makes the decision clear. The planner stays in control.</p>
+
+  <div class="cue">[Open Forecast.]</div>
+  <p class="spoken">Now let’s look at the forecast. This is not a black box that asks the planner to trust one number. Demand Genie compares seven forecasting models on the same rolling-origin test. That includes classical models and the TiRex2 foundation model.</p>
+  <p class="spoken">Here, I can see the selected model, its error, its bias, the demand history, and the forecast range. If the forecast suggests a change to average daily usage, the dashboard creates a proposal for review. It does not silently overwrite qualified demand or approved buffer settings.</p>
+
+  <div class="cue">[Switch to Decomposition.]</div>
+  <p class="spoken">The decomposition view then helps explain the pattern. It separates demand into trend, seasonality, and the remaining variation. It also states its limits clearly. In this sample, we have three annual cycles, so this is useful diagnostic evidence, not certainty.</p>
+
+  <div class="cue">[Show Spend, then Portfolio.]</div>
+  <p class="spoken">The same transparency continues into procurement. In Spend, I can see reconciled spend, concentration by category or supplier, and review prompts supported by evidence. There are no invented savings claims here. The purpose is to help the team ask the right commercial question.</p>
+  <p class="spoken">In Portfolio, the Kraljic view combines business impact and supply risk. And the item segmentation shows the demand behaviour behind each item, not just a simple ABC label.</p>
+
+  <div class="cue">[Briefly show Execution and Buffers.]</div>
+  <p class="spoken">Execution shows the open supply that may need intervention. Buffers shows the approved settings behind every buffer: demand, lead time, variability, order rules, ownership, and review date.</p>
+
+  <div class="cue">[Show Data.]</div>
+  <p class="spoken">Finally, this is the trust layer. The Data view shows the controls behind the dashboard. It checks the calculation inputs, reconciles spend, checks forecast provenance, and shows the impact of every warning.</p>
+  <p class="spoken">For example, if I upload a workbook that does not match the analysed forecast package, the dashboard says so. It uses clearly labelled browser benchmarks. It does not pretend that ARIMA, TiRex2, or robust STL ran in the browser.</p>
+
+  <div class="cue">[Keep the Data view visible, or briefly show the build log.]</div>
+  <p class="spoken">I built Demand Genie with Codex and GPT-5.6. They helped me turn complex supply-chain requirements into the dashboard, the planning logic, the forecast analysis, and the automated checks you see here.</p>
+  <p class="spoken">This demo uses a synthetic workbook. But the workflow is designed for the same kind of data that planners already work with every day.</p>
+  <p class="spoken">Demand Genie makes planning more transparent. Fewer hidden assumptions. Clearer evidence. And faster, more confident human decisions.</p>
+
+  <p class="note">Recording note: this script accurately describes the packaged synthetic demonstration workbook. Do not claim live ERP integration, automatic purchasing, or browser-based TiRex2/ARIMA execution.</p>
+  <p class="footer">Demand Genie V4 — video narration</p>
+</body>
+</html>

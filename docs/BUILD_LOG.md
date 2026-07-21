@@ -52,11 +52,18 @@ This file tracks timestamped project work for OpenAI Build Week.
 - Built `dashboard-v5.html` with a visible pattern mix, all four ADI/CV2 quadrants, threshold labels, and an exception queue ranked lumpy, intermittent, erratic, then smooth.
 - Passed 23 independent calculation controls plus desktop/mobile rendering, exact-hash upload, corrupted-upload, missing-DDMRP-input, export, keyboard, and overflow tests.
 
-## Codex Collaboration Notes
+## 2026-07-21 22:44 CEST
 
-Add entries here as major features are designed and built. Include:
+- Finalized the project name as Demand Genie, the category as Work & Productivity, and Version 5 as the judging release.
+- Added a judge-oriented README Quick Start covering direct offline launch, an optional local server, the exact sample workbook, upload behavior, and regeneration of the standalone HTML.
+- Reconciled the hackathon checklist with decisions already evidenced in the repository and separated completed requirements from external submission actions.
+- Updated the product brief from the original forecast-monitoring MVP to the implemented seven-view planning workbench.
 
-- What changed.
-- Which product or engineering decision was made.
-- How Codex contributed.
-- Any GPT-5.6-specific usage that should be mentioned in the final Devpost submission.
+## Codex and GPT-5.6 collaboration summary
+
+- The supply-chain practitioner remained the product owner and domain reviewer: they defined the problem, selected the planning disciplines, set the offline and human-oversight constraints, reviewed each release, and challenged results that did not look credible.
+- GPT-5.6 helped translate domain direction into implementation plans, reason across forecasting, DDMRP, procurement, segmentation, provenance, and information design, and critique whether the combined workflow remained coherent.
+- Codex accelerated repository execution: it researched primary guidance, created reusable domain workflows, generated and validated synthetic workbooks, built five dashboard iterations, ran R and Python forecast pipelines, executed TiRex2 locally, tested browser behavior, and maintained the audit trail.
+- The review loop changed implementation decisions. Adversarial checks led to exact-hash forecast provenance and strict missing-input gates in Version 4. A planner challenge to the uniform ADI/CV2 display identified an unrealistic fixture and led to the four-pattern Version 5 dataset.
+- Human review remains explicit in the product. Order releases, forecast-driven buffer proposals, and commercial opportunities are review queues rather than autonomous or booked decisions.
+- Supporting evidence is available in the repository: implementation history in this build log, setup and role attribution in `README.md`, and independent calculation results in `data/audit-v5.json`.

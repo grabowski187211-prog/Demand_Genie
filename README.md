@@ -1,8 +1,41 @@
 # Demand Genie
 
-Demand Genie is an OpenAI Build Week hackathon project.
+Demand Genie is an OpenAI Build Week Work & Productivity project: a standalone decision-support workbench for manufacturing planners. It combines forecast evaluation, time-series decomposition, DDMRP replenishment, procurement spend, supplier risk, and demand segmentation in one offline HTML dashboard.
 
-The working product scope is still being defined. This repository is now set up to track the implementation, submission requirements, and Codex-assisted build history in one place.
+The project also explores the democratization of data and code. Its premise is that planners should be able to turn their own operational knowledge into professional, maintainable tools instead of waiting months or years for an ERP provider to deliver a generic solution.
+
+## Quick Start
+
+### Run the dashboard
+
+1. Clone or download this repository.
+2. Open [`dashboard-v5.html`](dashboard-v5.html) in a current version of Chrome, Edge, Firefox, or Safari.
+3. Explore the seven views: **Replenishment**, **Forecast**, **Spend**, **Portfolio**, **Execution**, **Buffers**, and **Data**.
+
+That is the complete runtime setup. Version 5 is a self-contained HTML application with its JavaScript, styling, sample data, forecast results, and spreadsheet reader embedded. It needs no package installation, application server, account, API key, network connection, or access to OpenAI services.
+
+If your browser restricts local files, serve the repository with Python and open <http://localhost:8001/dashboard-v5.html>:
+
+```bash
+python3 -m http.server 8001
+```
+
+### Exercise the Excel upload workflow
+
+1. In the dashboard, select **Load workbook**.
+2. Choose [`data/Demand_Genie_Synthetic_Portfolio_v5.xlsx`](data/Demand_Genie_Synthetic_Portfolio_v5.xlsx).
+3. Confirm that the dashboard reports the uploaded workbook and keeps the full packaged ARIMA, ETS, and TiRex2 evidence available.
+
+The bundled workbook is deterministic synthetic data; it contains no real products, suppliers, contracts, or transactions. Its SHA-256 matches the packaged analysis. A different workbook can also be loaded, but the dashboard intentionally falls back to clearly labeled browser benchmarks when no content-matched offline forecast package is available.
+
+If the generated HTML is not present, install `openpyxl` and rebuild it from the committed source and data artifacts:
+
+```bash
+python3 -m pip install openpyxl
+python3 scripts/build_dashboard_v5.py
+```
+
+The sections below document the sample data, full analytical rebuild, validation, audit, and optional browser-test workflows.
 
 ## Hackathon
 
@@ -10,7 +43,47 @@ The working product scope is still being defined. This repository is now set up 
 - Deadline: July 21, 2026 at 5:00 PM PT
 - Devpost: https://openai.devpost.com/
 - Repository: https://github.com/grabowski187211-prog/Demand_Genie
-- Expected category: TBD
+- Category: Work & Productivity
+
+## Built with Codex and GPT-5.6
+
+Demand Genie was built as an iterative collaboration between a supply-chain practitioner and Codex, powered by GPT-5.6. It was not generated from a single prompt. I remained the product owner and domain reviewer: I defined the planner problem, selected the planning methods, set the usability and deployment constraints, reviewed each version, and challenged results that did not look credible. GPT-5.6 helped translate that direction into implementation plans, reason across forecasting and supply-chain concepts, and critique the work. Codex then carried that reasoning through the repository by researching, writing code, running analysis, testing in a browser, auditing calculations, and maintaining the Git history.
+
+### How we divided the work
+
+| Area | My product, engineering, or design decision | How GPT-5.6 and Codex accelerated the work |
+| --- | --- | --- |
+| Product direction | I framed Demand Genie around problems I have seen in manufacturing: noisy demand, disconnected spreadsheets, biased forecasts, and planners held accountable without usable decision support. I also made democratization central to the idea—supply-chain professionals should be able to build tools around their own workflows. | GPT-5.6 helped turn the domain narrative into a focused Work & Productivity product and a planner journey built around monitoring, exceptions, drill-down, and action. |
+| Delivery model | I chose a self-contained HTML dashboard with Excel upload, no application server, and no runtime network dependency. I also required each major iteration to remain available instead of being overwritten. | Codex implemented the browser application, embedded its dependencies and validated artifacts, generated the upload workbooks, and preserved Versions 1-5 as an inspectable product history. |
+| Information design | I required the dashboards to follow Stephen Few's information-dashboard principles and to avoid decorative or misleading analytics. I chose an exception-first workbench rather than a wall of KPI cards. | Codex researched the primary guidance, encoded it in the reusable `few-dashboard` skill, and applied a restrained hierarchy, compact comparisons, meaningful color, ranked queues, and responsive layouts. |
+| Planning methods | I chose forecasting, DDMRP, spend analysis, supplier exposure, Kraljic strategy, and modern item segmentation as parts of one planning workflow. I explicitly asked that forecasts inform planning without becoming unexplained automatic decisions. | GPT-5.6 synthesized the disciplines while Codex created reusable `fpp3`, `ddmrp`, and `spend-analysis` workflows, generated a coherent 80-SKU dataset, and connected the calculations across the dashboard views. |
+| Forecast engineering | I asked for real model comparison, TiRex2, decomposition, and decision-grade accuracy—not a visually convincing mockup. | Codex built R and Python pipelines for seven classical and foundation-model candidates, 23,520 rolling-origin predictions, training-only scaled errors, per-SKU selection, forecast intervals, and robust STL decomposition. It ran the official TiRex2 model locally and packaged the resulting artifacts for offline use. |
+| Quality and realism | I requested a devil's-advocate review and authorized parallel specialist agents. Later, I noticed that the original ADI/CV2 view looked unrealistically uniform and asked whether the calculation or the synthetic data was wrong. | The review found material weaknesses, including stale packaged results being applied to modified uploads and missing inputs being treated as zero. Codex hardened V4 with exact SHA-256 provenance, explicit calculation gates, and independent controls. It then traced the segmentation issue to an overly smooth fixture—not a chart bug—and built V5 with realistic smooth, erratic, intermittent, and lumpy histories. |
+| Human oversight | I kept the final say on scope, realism, and what the dashboard is allowed to claim. Commercial outputs remain review queues, and replenishment recommendations remain decision support. | GPT-5.6 and Codex made rapid exploration practical while also exposing assumptions, warnings, data provenance, backtest evidence, and audit results so that the human reviewer can challenge the output. |
+
+### Where Codex changed the pace
+
+Codex compressed a workflow that normally spans separate research, data-engineering, forecasting, front-end, QA, and documentation efforts into a tight build-review loop. Within the project thread it scaffolded and connected the GitHub repository, researched and created four reusable domain skills, generated and validated the Excel data model, built five dashboard iterations, ran R and Python forecasting pipelines, executed the local TiRex2 checkpoint, performed multi-agent adversarial reviews, tested desktop and mobile behavior with Playwright, and committed each milestone. When tests or reviews exposed a weakness, Codex followed the evidence through the data, calculation, interface, and documentation layers instead of only patching the visible symptom.
+
+GPT-5.6 was especially valuable for long-horizon reasoning across those layers: keeping product intent, statistical validity, supply-chain rules, provenance, and interface behavior consistent while the implementation grew. Codex supplied the agentic execution environment around that reasoning—the ability to inspect files, use the shell and browser, edit and run code, coordinate specialist reviews, and verify the result. The combination let me work at the level of product direction and domain judgment while still remaining directly involved in every important decision.
+
+The primary Codex project thread is session `019f83b6-8ade-7751-bd4e-69a13f3d6f36`. A timestamped technical record is available in [the build log](docs/BUILD_LOG.md), and the independent V5 calculation results are in [the machine-readable audit](data/audit-v5.json).
+
+## Development Journey
+
+### Overview
+
+Demand Genie evolved through five evidence-driven iterations, moving from a focused demand-monitoring prototype to a decision-support workbench spanning forecasting, replenishment, procurement, supplier risk, execution, and buffer governance. Each version responded to a concrete planner need or a weakness exposed through calculation audits, adversarial review, browser testing, or hands-on product review.
+
+The journey also shows how GPT-5.6 and Codex accelerated development without replacing human judgment. GPT-5.6 helped reason across product, forecasting, and supply-chain decisions; Codex implemented and tested those decisions throughout the repository. The supply-chain practitioner remained responsible for the problem definition, method selection, realism checks, automation boundaries, and final acceptance of each iteration.
+
+- **Version 1 — Demand-monitoring MVP:** established the exception-first dashboard, demand history, forecast comparisons, accuracy and bias context, drill-down, and CSV export.
+- **Version 2 — Forecasting and replenishment:** added Excel upload, multi-model forecasting, DDMRP buffers, net-flow positions, and order recommendations.
+- **Version 3 — Connected planning workbench:** brought procurement spend, supplier exposure, Kraljic strategy, execution risks, and ABC/XYZ plus ADI/CV2 segmentation into the same seven-view workflow.
+- **Version 4 — Decision-grade controls:** replaced the single holdout with rolling-origin evaluation, ran TiRex2 locally, added robust STL decomposition, enforced exact SHA-256 forecast provenance, and introduced explicit calculation gates and independent audits.
+- **Version 5 — Realistic demand behavior:** traced an unrealistic segmentation result to overly smooth sample data, rebuilt the 80-SKU portfolio across smooth, erratic, intermittent, and lumpy patterns, and recalculated the complete planning and forecast package.
+
+Each iteration was preserved rather than overwritten so judges can inspect how testing, planner review, and Codex-assisted analysis changed the product. See the [timestamped build log](docs/BUILD_LOG.md) for the detailed implementation record.
 
 ## Submission Requirements
 

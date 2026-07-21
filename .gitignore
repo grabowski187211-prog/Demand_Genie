@@ -34,3 +34,7 @@ venv/
 # IDE/editor
 .idea/
 .vscode/
+
+# Local notes and private reference material
+Untitled.md
+reference_material/

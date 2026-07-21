@@ -1,6 +1,6 @@
 {
   "status": "PASS_WITH_WARNINGS",
-  "generated_at_utc": "2026-07-21T15:37:09.766767+00:00",
+  "generated_at_utc": "2026-07-21T21:00:35.483948+00:00",
   "checks": [
     {
       "name": "Prior dashboard versions are byte-for-byte unchanged",
