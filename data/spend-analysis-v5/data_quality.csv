@@ -1,0 +1,23 @@
+Check,Value,Status,Detail
+Input rows,1964,INFO,Rows read before validation
+Analyzed rows,1964,PASS,Rows with valid spend and date
+Invalid spend rows,0,PASS,Excluded from calculations; correct at source
+Invalid date rows,0,PASS,Excluded from calculations; correct at source
+Duplicate transaction-line keys,0,PASS,Duplicates remain in totals; resolve before decisions
+Missing transaction-line keys,0,PASS,"Source, transaction, and line IDs are required for lineage"
+Future-dated rows,0,PASS,Validate scope and posting dates
+Base currencies,EUR,PASS,Exactly one base currency is required
+Raw supplier coverage by positive spend,1.0,PASS,A source supplier is required for every spend line
+Category coverage by positive spend,1.0,PASS,Unclassified spend must remain visible
+Normalized supplier coverage by positive spend,1.0,INFO,Raw supplier fallback is used when absent
+Contract-status coverage by positive spend,1.0,INFO,Unknown is not treated as off-contract
+Control-total reconciliation,0.0,PASS,Analyzed 143686430.21; control 143686430.21; tolerance 0.01
+Demand rows,2880,INFO,Valid numeric/date rows
+Demand item-locations,80,INFO,Segmentation grain
+Incomplete demand histories,0,PASS,Missing periods are not converted to zero
+Demand base currency,EUR,PASS,Demand unit cost must use the same base currency as spend
+Invalid demand period rows,0,PASS,Excluded from segmentation
+Invalid demand/cost rows,0,PASS,Excluded from segmentation
+Negative demand rows,0,PASS,Returns require explicit treatment
+Nonpositive unit-cost rows,0,PASS,Annual usage value requires positive approved cost
+Duplicate demand keys,0,PASS,Expected one part-location-period row

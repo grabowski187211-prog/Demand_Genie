@@ -41,6 +41,13 @@ def pinball_loss(actual: float, prediction: float, quantile: float) -> float:
     return max(quantile * error, (quantile - 1.0) * error)
 
 
+def rearrange_quantiles(prediction: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """Clip at zero and monotonically rearrange marginal quantiles per horizon."""
+    clipped = np.maximum(prediction, 0.0)
+    raw_crossings = np.sum(np.diff(clipped, axis=0) < 0, axis=0)
+    return np.sort(clipped, axis=0), raw_crossings
+
+
 def forecast_batch(model, values: np.ndarray, length: int, horizon: int, batch_size: int) -> tuple[list[np.ndarray], float]:
     timeseries = [
         TimeseriesType(
@@ -88,6 +95,8 @@ def summarize_scores(frame: pd.DataFrame) -> pd.DataFrame:
                 "Mean_PI95_Width": math.nan,
                 "Mean_Pinball_Loss": float(group["Mean_Pinball_Loss"].mean()),
                 "Quantile_Crossings": int(group["Quantile_Crossings"].sum()),
+                "Raw_Quantile_Crossings": int(group["Raw_Quantile_Crossings"].sum()),
+                "Rearranged_Points": int(group["Quantile_Rearranged"].sum()),
                 "Error_Sum": float(errors.sum()),
                 "Absolute_Error_Sum": float(abs_errors.sum()),
                 "Squared_Error_Sum": float(squared_errors.sum()),
@@ -171,6 +180,8 @@ def main() -> None:
     model = load_model(snapshot_path, device="cpu")
     model_load_seconds = time.monotonic() - load_started
     quantiles = [float(value) for value in model._quantile_levels()]
+    if quantiles != sorted(quantiles):
+        raise RuntimeError(f"TiRex2 quantile levels are not ordered: {quantiles}")
     q50_index = quantiles.index(0.5)
     q10_index = quantiles.index(0.1)
     q90_index = quantiles.index(0.9)
@@ -190,12 +201,12 @@ def main() -> None:
             seasonal_errors = train[12:] - train[:-12]
             mase_scale = float(np.mean(np.abs(seasonal_errors)))
             rmsse_scale = float(np.mean(seasonal_errors**2))
-            clipped = np.maximum(prediction, 0.0)
+            rearranged, raw_crossings = rearrange_quantiles(prediction)
             for step in range(EVALUATION_HORIZON):
                 actual = float(values[sku_index, training_months + step])
-                point = float(clipped[q50_index, step])
+                point = float(rearranged[q50_index, step])
                 error = actual - point
-                q_values = clipped[:, step]
+                q_values = rearranged[:, step]
                 row = {
                     "Product_Group_Code": metadata[sku].get("Product_Group_Code", ""),
                     "Product_Group": metadata[sku].get("Product_Group", ""),
@@ -204,8 +215,8 @@ def main() -> None:
                     "Model": MODEL_NAME,
                     "Month": pd.Timestamp(months[sku_index][training_months + step]).date().isoformat(),
                     "Forecast_Units": point,
-                    "PI80_Lower_Units": float(clipped[q10_index, step]),
-                    "PI80_Upper_Units": float(clipped[q90_index, step]),
+                    "PI80_Lower_Units": float(rearranged[q10_index, step]),
+                    "PI80_Upper_Units": float(rearranged[q90_index, step]),
                     "PI95_Lower_Units": math.nan,
                     "PI95_Upper_Units": math.nan,
                     "Actual_Units": actual,
@@ -219,10 +230,12 @@ def main() -> None:
                     "Squared_Error": error**2,
                     "Scaled_Absolute_Error": abs(error) / mase_scale if mase_scale > 0 else math.nan,
                     "Scaled_Squared_Error": error**2 / rmsse_scale if rmsse_scale > 0 else math.nan,
-                    "Covered_80": float(clipped[q10_index, step]) <= actual <= float(clipped[q90_index, step]),
+                    "Covered_80": float(rearranged[q10_index, step]) <= actual <= float(rearranged[q90_index, step]),
                     "Covered_95": math.nan,
                     "Mean_Pinball_Loss": float(np.mean([pinball_loss(actual, qv, q) for qv, q in zip(q_values, quantiles)])),
-                    "Quantile_Crossings": int(np.sum(np.diff(prediction[:, step]) < 0)),
+                    "Quantile_Crossings": int(np.sum(np.diff(q_values) < 0)),
+                    "Raw_Quantile_Crossings": int(raw_crossings[step]),
+                    "Quantile_Rearranged": bool(raw_crossings[step]),
                     "Demand_Profile": metadata[sku].get("Demand_Profile", ""),
                 }
                 row.update({column: float(value) for column, value in zip(quantile_columns, q_values)})
@@ -236,14 +249,14 @@ def main() -> None:
     final_rows: list[dict[str, object]] = []
     for sku_index, sku in enumerate(skus):
         prediction = np.asarray(final_forecasts[sku_index], dtype=float)[0]
-        clipped = np.maximum(prediction, 0.0)
+        rearranged, raw_crossings = rearrange_quantiles(prediction)
         future_months = pd.date_range(
             pd.Timestamp(months[sku_index][-1]) + pd.offsets.MonthBegin(1),
             periods=FORECAST_HORIZON,
             freq="MS",
         )
         for step, month in enumerate(future_months):
-            q_values = clipped[:, step]
+            q_values = rearranged[:, step]
             row = {
                 "Product_Group_Code": metadata[sku].get("Product_Group_Code", ""),
                 "Product_Group": metadata[sku].get("Product_Group", ""),
@@ -251,13 +264,16 @@ def main() -> None:
                 "Month": month.date().isoformat(),
                 "SKU": sku,
                 "Model": MODEL_NAME,
-                "Forecast_Units": float(clipped[q50_index, step]),
-                "PI80_Lower_Units": float(clipped[q10_index, step]),
-                "PI80_Upper_Units": float(clipped[q90_index, step]),
+                "Forecast_Units": float(rearranged[q50_index, step]),
+                "PI80_Lower_Units": float(rearranged[q10_index, step]),
+                "PI80_Upper_Units": float(rearranged[q90_index, step]),
                 "PI95_Lower_Units": math.nan,
                 "PI95_Upper_Units": math.nan,
-                "Interval_Method": "Native TiRex2 marginal q10-q90 interval; no native 95% interval",
+                "Interval_Method": "TiRex2 marginal q10-q90 after monotone rearrangement; no native 95% interval",
                 "Demand_Profile": metadata[sku].get("Demand_Profile", ""),
+                "Quantile_Crossings": int(np.sum(np.diff(q_values) < 0)),
+                "Raw_Quantile_Crossings": int(raw_crossings[step]),
+                "Quantile_Rearranged": bool(raw_crossings[step]),
             }
             row.update({column: float(value) for column, value in zip(quantile_columns, q_values)})
             final_rows.append(row)
@@ -284,6 +300,7 @@ def main() -> None:
         "Point_Forecast": "q50",
         "Native_Interval": "q10-q90 (80% marginal interval)",
         "Quantiles": ",".join(str(q) for q in quantiles),
+        "Quantile_Postprocessing": "Non-negative clipping followed by monotone rearrangement per forecast horizon",
         "Device": "cpu",
         "Batch_Size": args.batch_size,
         "TTA_Diff": True,

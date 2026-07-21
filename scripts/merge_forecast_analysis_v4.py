@@ -167,7 +167,7 @@ def main() -> None:
             for part in (
                 "Near-tied candidate models; planner judgment is material" if row["Near_Tie"] else "",
                 "Empirical 80% interval coverage needs review" if row["Calibration_Review"] else "",
-                "TiRex2 provides a native 80% interval but no native 95% interval" if row["Selected_Model"] == "TiRex2" else "",
+                "TiRex2 provides a marginal q10-q90 interval after declared quantile postprocessing but no native 95% interval" if row["Selected_Model"] == "TiRex2" else "",
                 "Only three annual cycles; seasonal evidence is limited",
             )
             if part
@@ -196,7 +196,8 @@ def main() -> None:
                 "TiRex2_Revision": tirex_metadata["Model_Revision"],
                 "TiRex2_Checkpoint_SHA256": tirex_metadata["Checkpoint_SHA256"],
                 "TiRex2_Inference_Seconds": tirex_metadata["Inference_Seconds"],
-                "Interval_Note": "Classical candidates expose native 80/95% model intervals; TiRex2 exposes native marginal q10-q90 only",
+                "TiRex2_Quantile_Postprocessing": tirex_metadata.get("Quantile_Postprocessing", "Not recorded"),
+                "Interval_Note": "Classical candidates expose native 80/95% model intervals; TiRex2 exposes marginal q10-q90 after declared postprocessing and no native 95% interval",
                 "Decomposition": classical_metadata["Decomposition"],
                 "Seasonality_Caveat": "36 monthly observations provide only three annual cycles",
                 "Generated_At_UTC": datetime.now(UTC).isoformat(),

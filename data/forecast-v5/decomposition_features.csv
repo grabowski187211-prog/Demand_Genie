@@ -1,0 +1,81 @@
+Product_Group_Code,Product_Group,SKU_Description,SKU,Trend_Strength,Seasonal_Strength,Remainder_SD,Seasonal_Cycles,Evidence_Quality,Demand_Profile
+BRG,Industrial Bearings,Industrial Bearings Core,BRG-01,0.30127687827904936,0.8469437203604527,21.355234960064667,3,Limited: fewer than four annual cycles,Smooth
+BRG,Industrial Bearings,Industrial Bearings Compact,BRG-02,0.06787997256586975,0.26461116693778375,91.39078776794464,3,Limited: fewer than four annual cycles,Smooth
+BRG,Industrial Bearings,Industrial Bearings Standard,BRG-03,0.11932565170729204,0.08558276085021654,150.63739534497225,3,Limited: fewer than four annual cycles,Smooth
+BRG,Industrial Bearings,Industrial Bearings Heavy Duty,BRG-04,0.024540989842073424,0.029425176586590274,784.0106214181844,3,Limited: fewer than four annual cycles,Erratic
+BRG,Industrial Bearings,Industrial Bearings Precision,BRG-05,0.12095385278119375,0.2226197436736579,148.5868069164218,3,Limited: fewer than four annual cycles,Smooth
+BRG,Industrial Bearings,Industrial Bearings High Capacity,BRG-06,0.05568845090326313,0.05226295035541639,1132.6708897559868,3,Limited: fewer than four annual cycles,Erratic
+BRG,Industrial Bearings,Industrial Bearings Service Kit,BRG-07,0.029864631362022,0.04096453182936499,615.2083692195916,3,Limited: fewer than four annual cycles,Intermittent
+BRG,Industrial Bearings,Industrial Bearings Premium,BRG-08,0,0.04399653702505901,1333.0306930847055,3,Limited: fewer than four annual cycles,Lumpy
+CNV,Conveying Components,Conveying Components Core,CNV-01,0,0.2688425534915344,62.84531758255765,3,Limited: fewer than four annual cycles,Smooth
+CNV,Conveying Components,Conveying Components Compact,CNV-02,0.0770568055795452,0.3171972368660765,94.47523628795653,3,Limited: fewer than four annual cycles,Smooth
+CNV,Conveying Components,Conveying Components Standard,CNV-03,0.010811778703614161,0.006311739732697719,532.7407237059969,3,Limited: fewer than four annual cycles,Erratic
+CNV,Conveying Components,Conveying Components Heavy Duty,CNV-04,0,0.21245878813930663,113.53136600081345,3,Limited: fewer than four annual cycles,Smooth
+CNV,Conveying Components,Conveying Components Precision,CNV-05,0,0,760.7909966468306,3,Limited: fewer than four annual cycles,Erratic
+CNV,Conveying Components,Conveying Components High Capacity,CNV-06,0.04179324377602811,0.11123416303849742,402.99014848508705,3,Limited: fewer than four annual cycles,Intermittent
+CNV,Conveying Components,Conveying Components Service Kit,CNV-07,3.3731062331177064e-4,0.9957521341310611,32.68476267432821,3,Limited: fewer than four annual cycles,Intermittent
+CNV,Conveying Components,Conveying Components Premium,CNV-08,2.494582744720919e-4,0,1037.79537577781,3,Limited: fewer than four annual cycles,Lumpy
+CVL,Control Valves,Control Valves Core,CVL-01,0.03934917428875928,0.12688228672673196,83.02069498007972,3,Limited: fewer than four annual cycles,Intermittent
+CVL,Control Valves,Control Valves Compact,CVL-02,0,0.2625361467433105,184.09020469711507,3,Limited: fewer than four annual cycles,Lumpy
+CVL,Control Valves,Control Valves Standard,CVL-03,0.13108412604237418,0.39972487749447116,24.934314154005936,3,Limited: fewer than four annual cycles,Smooth
+CVL,Control Valves,Control Valves Heavy Duty,CVL-04,0,0.005102375406598081,356.4316807525463,3,Limited: fewer than four annual cycles,Erratic
+CVL,Control Valves,Control Valves Precision,CVL-05,0.07012681198567561,0.16842918889406533,81.22918692904015,3,Limited: fewer than four annual cycles,Smooth
+CVL,Control Valves,Control Valves High Capacity,CVL-06,0,0.04756649200949559,451.3084841091605,3,Limited: fewer than four annual cycles,Erratic
+CVL,Control Valves,Control Valves Service Kit,CVL-07,0.01779617585238591,0.9788063228357585,34.73464206839171,3,Limited: fewer than four annual cycles,Intermittent
+CVL,Control Valves,Control Valves Premium,CVL-08,0,0,515.7780764593116,3,Limited: fewer than four annual cycles,Lumpy
+DRV,Electric Drives,Electric Drives Core,DRV-01,0.24637157039790203,0.39590810135167476,31.945831310696008,3,Limited: fewer than four annual cycles,Smooth
+DRV,Electric Drives,Electric Drives Compact,DRV-02,0.3869515944115848,0.6927211905940854,15.432754162196536,3,Limited: fewer than four annual cycles,Smooth
+DRV,Electric Drives,Electric Drives Standard,DRV-03,0.001741458866415635,0.1878777842558591,223.6728803628721,3,Limited: fewer than four annual cycles,Erratic
+DRV,Electric Drives,Electric Drives Heavy Duty,DRV-04,0,0,339.07895522358973,3,Limited: fewer than four annual cycles,Erratic
+DRV,Electric Drives,Electric Drives Precision,DRV-05,0.37613088034022135,0.5561099875074579,28.94744531580714,3,Limited: fewer than four annual cycles,Smooth
+DRV,Electric Drives,Electric Drives High Capacity,DRV-06,0.11367782822632966,0.9712841681366616,30.11220113617926,3,Limited: fewer than four annual cycles,Intermittent
+DRV,Electric Drives,Electric Drives Service Kit,DRV-07,0.013236556348694806,0.05706735350068448,209.34502087658262,3,Limited: fewer than four annual cycles,Intermittent
+DRV,Electric Drives,Electric Drives Premium,DRV-08,0,0,454.7884523788896,3,Limited: fewer than four annual cycles,Lumpy
+FST,Fastening Kits,Fastening Kits Core,FST-01,0.012112861076250203,0.06293532367613008,250.88603566762566,3,Limited: fewer than four annual cycles,Smooth
+FST,Fastening Kits,Fastening Kits Compact,FST-02,0.260092314363344,0.2340523157692802,81.72722926363868,3,Limited: fewer than four annual cycles,Smooth
+FST,Fastening Kits,Fastening Kits Standard,FST-03,0.02231586644737482,0.16036582274271705,269.1544073374404,3,Limited: fewer than four annual cycles,Smooth
+FST,Fastening Kits,Fastening Kits Heavy Duty,FST-04,0,0.09146212893376215,445.90686361511285,3,Limited: fewer than four annual cycles,Smooth
+FST,Fastening Kits,Fastening Kits Precision,FST-05,0.18698941624711152,0.6260069838972129,109.1412267317851,3,Limited: fewer than four annual cycles,Smooth
+FST,Fastening Kits,Fastening Kits High Capacity,FST-06,0.045801421382994145,0.044262377912025364,2523.4659940778292,3,Limited: fewer than four annual cycles,Erratic
+FST,Fastening Kits,Fastening Kits Service Kit,FST-07,0.008052758797953974,0.05229970864042355,1484.3225020987727,3,Limited: fewer than four annual cycles,Intermittent
+FST,Fastening Kits,Fastening Kits Premium,FST-08,0.009820273903551668,0,3694.672505283909,3,Limited: fewer than four annual cycles,Lumpy
+GBX,Gearbox Components,Gearbox Components Core,GBX-01,0.07277895475590979,0.2512673393002697,44.01825346638264,3,Limited: fewer than four annual cycles,Smooth
+GBX,Gearbox Components,Gearbox Components Compact,GBX-02,0,0.10631523288988143,80.28487990579475,3,Limited: fewer than four annual cycles,Smooth
+GBX,Gearbox Components,Gearbox Components Standard,GBX-03,0.1586100716612614,0.19218426637331176,346.9585413837118,3,Limited: fewer than four annual cycles,Erratic
+GBX,Gearbox Components,Gearbox Components Heavy Duty,GBX-04,0.05671727072979493,0.0922851261729355,462.4077278775217,3,Limited: fewer than four annual cycles,Erratic
+GBX,Gearbox Components,Gearbox Components Precision,GBX-05,0,0.11994162272289788,131.11096750339047,3,Limited: fewer than four annual cycles,Smooth
+GBX,Gearbox Components,Gearbox Components High Capacity,GBX-06,0.007972937949687342,0.03991027543664005,306.90834815162367,3,Limited: fewer than four annual cycles,Intermittent
+GBX,Gearbox Components,Gearbox Components Service Kit,GBX-07,0.05578642852201776,0.09824417001878272,362.2979197440095,3,Limited: fewer than four annual cycles,Intermittent
+GBX,Gearbox Components,Gearbox Components Premium,GBX-08,0,7.227486181791143e-4,602.2548959384683,3,Limited: fewer than four annual cycles,Lumpy
+HYP,Hydraulic Pumps,Hydraulic Pumps Core,HYP-01,0.03260079226256829,0.07272788068670266,46.92193766759418,3,Limited: fewer than four annual cycles,Smooth
+HYP,Hydraulic Pumps,Hydraulic Pumps Compact,HYP-02,0.013983114067515401,0.009429596384761041,222.63929609470298,3,Limited: fewer than four annual cycles,Erratic
+HYP,Hydraulic Pumps,Hydraulic Pumps Standard,HYP-03,0,0.23041108619180228,48.80148685822828,3,Limited: fewer than four annual cycles,Smooth
+HYP,Hydraulic Pumps,Hydraulic Pumps Heavy Duty,HYP-04,0.20156786741130206,0.4299664622529298,234.904844511288,3,Limited: fewer than four annual cycles,Erratic
+HYP,Hydraulic Pumps,Hydraulic Pumps Precision,HYP-05,0.001292377307250292,0,178.36773923370532,3,Limited: fewer than four annual cycles,Intermittent
+HYP,Hydraulic Pumps,Hydraulic Pumps High Capacity,HYP-06,0.23511470338524354,0.2013902958808984,270.4018160120668,3,Limited: fewer than four annual cycles,Lumpy
+HYP,Hydraulic Pumps,Hydraulic Pumps Service Kit,HYP-07,0.012945867378450493,0.9854791155738873,28.610093829997435,3,Limited: fewer than four annual cycles,Intermittent
+HYP,Hydraulic Pumps,Hydraulic Pumps Premium,HYP-08,0,0,337.6485353621708,3,Limited: fewer than four annual cycles,Lumpy
+PCK,Packaging Equipment,Packaging Equipment Core,PCK-01,0.008388030599149054,0.12648297918508145,48.35648977031891,3,Limited: fewer than four annual cycles,Intermittent
+PCK,Packaging Equipment,Packaging Equipment Compact,PCK-02,0,0.040217346198598514,144.08887590956755,3,Limited: fewer than four annual cycles,Lumpy
+PCK,Packaging Equipment,Packaging Equipment Standard,PCK-03,0.0076403230883482776,0,157.21989125176015,3,Limited: fewer than four annual cycles,Erratic
+PCK,Packaging Equipment,Packaging Equipment Heavy Duty,PCK-04,0.012514705569547258,0.03847901820014754,151.72320656092631,3,Limited: fewer than four annual cycles,Lumpy
+PCK,Packaging Equipment,Packaging Equipment Precision,PCK-05,0.027690588247317516,0.958340109082903,21.39397497070637,3,Limited: fewer than four annual cycles,Intermittent
+PCK,Packaging Equipment,Packaging Equipment High Capacity,PCK-06,6.649064104735647e-5,0,191.91610264558102,3,Limited: fewer than four annual cycles,Lumpy
+PCK,Packaging Equipment,Packaging Equipment Service Kit,PCK-07,0,0.07618329606986263,292.1751876032437,3,Limited: fewer than four annual cycles,Erratic
+PCK,Packaging Equipment,Packaging Equipment Premium,PCK-08,0.023553559579461703,0.1351383158001883,303.5871718688431,3,Limited: fewer than four annual cycles,Lumpy
+SEA,Sealing Systems,Sealing Systems Core,SEA-01,0.41346954791626267,0.46161610910379347,28.588923503497227,3,Limited: fewer than four annual cycles,Smooth
+SEA,Sealing Systems,Sealing Systems Compact,SEA-02,0.041633685882075167,0.37805875782676135,120.81963797900299,3,Limited: fewer than four annual cycles,Smooth
+SEA,Sealing Systems,Sealing Systems Standard,SEA-03,0,0.0828385362402212,234.90284809169867,3,Limited: fewer than four annual cycles,Smooth
+SEA,Sealing Systems,Sealing Systems Heavy Duty,SEA-04,0.3213236454530066,0.6327060798483651,57.44499270744528,3,Limited: fewer than four annual cycles,Smooth
+SEA,Sealing Systems,Sealing Systems Precision,SEA-05,0.056190328666002265,0.12052735280360072,243.2071820268246,3,Limited: fewer than four annual cycles,Smooth
+SEA,Sealing Systems,Sealing Systems High Capacity,SEA-06,0.08840798374950865,0.009183120030697434,1596.4378010382484,3,Limited: fewer than four annual cycles,Erratic
+SEA,Sealing Systems,Sealing Systems Service Kit,SEA-07,0.048958240549096144,0.09039698232411641,935.6149009507174,3,Limited: fewer than four annual cycles,Intermittent
+SEA,Sealing Systems,Sealing Systems Premium,SEA-08,0.007060939941837874,0.23214002839782433,2069.3781793687103,3,Limited: fewer than four annual cycles,Lumpy
+SNS,Sensor Modules,Sensor Modules Core,SNS-01,0.7149866196504848,0.28294007232082385,27.740468869139367,3,Limited: fewer than four annual cycles,Smooth
+SNS,Sensor Modules,Sensor Modules Compact,SNS-02,0.0505618257105831,0.06154360471004716,463.1972488846663,3,Limited: fewer than four annual cycles,Erratic
+SNS,Sensor Modules,Sensor Modules Standard,SNS-03,0.38160168136545924,0.19434454196781836,106.98527442679621,3,Limited: fewer than four annual cycles,Smooth
+SNS,Sensor Modules,Sensor Modules Heavy Duty,SNS-04,0.018737953786038042,0.04464226406609828,632.0821616285098,3,Limited: fewer than four annual cycles,Erratic
+SNS,Sensor Modules,Sensor Modules Precision,SNS-05,0.22810918088401533,0.05166737622326134,143.50705757492983,3,Limited: fewer than four annual cycles,Smooth
+SNS,Sensor Modules,Sensor Modules High Capacity,SNS-06,0.07898579672207995,0.07736220707516073,393.0220075994692,3,Limited: fewer than four annual cycles,Intermittent
+SNS,Sensor Modules,Sensor Modules Service Kit,SNS-07,0.043005589275632694,0.07961715434805217,455.03342146943237,3,Limited: fewer than four annual cycles,Intermittent
+SNS,Sensor Modules,Sensor Modules Premium,SNS-08,0,0,1050.418712072673,3,Limited: fewer than four annual cycles,Lumpy

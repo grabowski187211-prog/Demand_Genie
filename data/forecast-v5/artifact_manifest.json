@@ -1,0 +1,80 @@
+{
+  "package": "Demand Genie forecast analysis V4",
+  "input_file": "data/Demand_Genie_Synthetic_Portfolio_v5.xlsx",
+  "input_sha256": "369e0d009f0cd28c71a2e8acbfa5811fb579f3e93c90cf444cf62aaa9fdf07c2",
+  "generated_at_utc": "2026-07-21T15:34:23.807437+00:00",
+  "artifacts": {
+    "all_model_forecasts.csv": {
+      "sha256": "e9d9018ab43095f4062a2501ad29b74f9c0edc296bca861d634bca134d4ba9f2",
+      "bytes": 1526394
+    },
+    "classical_all_model_forecasts.csv": {
+      "sha256": "1e63453e73b5dc08337ef6f1a71855bc6134780d5647353621e9d4bde17060f0",
+      "bytes": 1079248
+    },
+    "classical_backtest_predictions.csv": {
+      "sha256": "49b96af03428fdb04f01c672f16da51a5e24268414211f0769d7cce3ecbe5479",
+      "bytes": 5487385
+    },
+    "classical_model_selection.csv": {
+      "sha256": "cfd7fa95755d63780300aed2d636b7b9edd3c7104ad82064dbb7e26c318cec98",
+      "bytes": 148168
+    },
+    "classical_run_metadata.csv": {
+      "sha256": "67ba9ec78fc3b4b345d96856e5c587042d914c49410091cc7e199da6c19defcc",
+      "bytes": 614
+    },
+    "decomposition.csv": {
+      "sha256": "9d5399098ee5559e9f921e9e1bac2c22ba5672c82aec4b79c92568f2d0bb5725",
+      "bytes": 440947
+    },
+    "decomposition_features.csv": {
+      "sha256": "2eddf2dc8fef7eaa85b143dbfd6d5769997036fcc1e0f98e3f5c0d4a1fc5a875",
+      "bytes": 12627
+    },
+    "forecast_exceptions.csv": {
+      "sha256": "e75c865ea703ad83b5ca9f47e61517c9c7e03650d28e6eda45e46e5baaac3594",
+      "bytes": 50967
+    },
+    "forecast_results.csv": {
+      "sha256": "2bb4d7e3cd1bac7ddcd9103c0848c00b5ea4cf26aa4b7b20f7d654511baec327",
+      "bytes": 281731
+    },
+    "model_selection.csv": {
+      "sha256": "26fa8a339fb05e2df608a18ec7a88e636fddc75e8853604e43ba6959673c8bc5",
+      "bytes": 217636
+    },
+    "model_summary.csv": {
+      "sha256": "627b689085043a0ae1379d6872e90c8587feb353b3a7992118183b646b6217c8",
+      "bytes": 1197
+    },
+    "rolling_origin_predictions.csv": {
+      "sha256": "3128aa99521e2b3c0f928aa82db72a2e01579487564c0f343ae78ad2baa74ce3",
+      "bytes": 7424504
+    },
+    "run_metadata.csv": {
+      "sha256": "8c993d3071a2b5bc396bc776f82dbc250950ae9ab48c65bbd46437a488364bd3",
+      "bytes": 1419
+    },
+    "tirex2_all_model_forecasts.csv": {
+      "sha256": "d9cc61856b07d923df8d49ce2a13faaa90dd7bb6078f16053cb793a22b4c4493",
+      "bytes": 356654
+    },
+    "tirex2_backtest_predictions.csv": {
+      "sha256": "ed3b3c60fec4930fd2246bc68c671fb6bc8ad094f428c34f59da3faba5ac54a5",
+      "bytes": 1534610
+    },
+    "tirex2_model_selection.csv": {
+      "sha256": "2189a2264651b7eabc2ec6f964ce13256326fc9bf57506e0bd94dc5eea1a9f20",
+      "bytes": 26165
+    },
+    "tirex2_run_metadata.csv": {
+      "sha256": "dbdc4af532eb74fcaadd8a6b4b106fce57b7b80f002079aa9942ce53369218b3",
+      "bytes": 1076
+    },
+    "tirex2_run_metadata.json": {
+      "sha256": "d00a62e3204ea3084be0ac10922e97d88915fc9d72105f675f9089391f5b0b6b",
+      "bytes": 1322
+    }
+  }
+}

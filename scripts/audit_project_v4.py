@@ -156,7 +156,7 @@ def audit_immutable_dashboards(audit: Audit) -> None:
         if actual_hash != expected_hash:
             mismatches.append(filename)
     audit.check(
-        "Versions 1-3 are byte-for-byte unchanged",
+        "Prior dashboard versions are byte-for-byte unchanged",
         not mismatches,
         "Immutable hashes match" if not mismatches else f"Hash mismatch: {', '.join(mismatches)}",
     )
@@ -651,6 +651,8 @@ def audit_forecasts(
     protocol_errors: list[str] = []
     score_errors: list[str] = []
     interval_errors: list[str] = []
+    tirex_raw_crossings = 0
+    tirex_rearranged_points = 0
     models = sorted({model for _, model in grouped})
     for (sku, model), rows in grouped.items():
         rows.sort(key=lambda row: (integer(row["Origin"]), integer(row["Horizon_Step"])))
@@ -695,6 +697,10 @@ def audit_forecasts(
                 quantiles = [number(row[f"Q{level}_Units"]) for level in range(10, 100, 10)]
                 if any(value is None for value in quantiles) or any(left > right for left, right in zip(quantiles, quantiles[1:])):
                     interval_errors.append(f"{sku}/{model}: quantiles")
+                tirex_raw_crossings += integer(row.get("Raw_Quantile_Crossings", 0))
+                tirex_rearranged_points += int(bool_value(row.get("Quantile_Rearranged")) is True)
+                if integer(row.get("Quantile_Crossings", 0)) != 0:
+                    interval_errors.append(f"{sku}/{model}: unresolved crossing")
                 if lower95 is not None or upper95 is not None or bool_value(row["Covered_95"]) is not None:
                     interval_errors.append(f"{sku}/{model}: false 95%")
             elif lower95 is None or upper95 is None or lower95 > lower80 or upper95 < upper80:
@@ -723,7 +729,7 @@ def audit_forecasts(
     audit.check(
         "Forecast intervals and TiRex2 quantiles are ordered and truthfully labeled",
         not interval_errors,
-        "Classical 80/95% and TiRex2 native q10-q90 semantics pass" if not interval_errors else interval_errors[0],
+        "Classical 80/95% and TiRex2 q10-q90 semantics pass" if not interval_errors else interval_errors[0],
     )
 
     selection_errors = []
@@ -766,6 +772,8 @@ def audit_forecasts(
         "score_rows": len(scores),
         "selected_models": dict(sorted(selected_counts.items())),
         "tirex2_selected_skus": selected_counts["TiRex2"],
+        "tirex2_raw_quantile_crossings": tirex_raw_crossings,
+        "tirex2_rearranged_points": tirex_rearranged_points,
     }
 
 

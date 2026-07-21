@@ -1,0 +1,217 @@
+{
+  "status": "PASS_WITH_WARNINGS",
+  "generated_at_utc": "2026-07-21T15:37:09.766767+00:00",
+  "checks": [
+    {
+      "name": "Prior dashboard versions are byte-for-byte unchanged",
+      "status": "PASS",
+      "detail": "Immutable hashes match"
+    },
+    {
+      "name": "Workbook contract contains all required sheets",
+      "status": "PASS",
+      "detail": "All required sheets present"
+    },
+    {
+      "name": "Demand history has complete unique monthly keys",
+      "status": "PASS",
+      "detail": "2,880 rows; 80 SKUs; 36 contiguous months per SKU"
+    },
+    {
+      "name": "Demand values are numeric and nonnegative",
+      "status": "PASS",
+      "detail": "All demand values are usable"
+    },
+    {
+      "name": "Forecast and spend demand facts reconcile",
+      "status": "PASS",
+      "detail": "Demand_Data equals Demand_History at SKU-month grain"
+    },
+    {
+      "name": "V5 demand-pattern fixture matches declared ADI/CV2 targets",
+      "status": "PASS",
+      "detail": "30 smooth, 18 erratic, 17 intermittent, and 15 lumpy SKUs independently reproduced"
+    },
+    {
+      "name": "DDMRP position inputs are complete",
+      "status": "PASS",
+      "detail": "80 item-location positions; 0 invalid input rows"
+    },
+    {
+      "name": "DDMRP source facts aggregate to positions",
+      "status": "PASS",
+      "detail": "Inventory, eligible open supply, and qualified demand reconcile"
+    },
+    {
+      "name": "DDMRP ADU uses trailing 12 complete months/calendar days",
+      "status": "PASS",
+      "detail": "All 80 baseline ADU values independently recomputed"
+    },
+    {
+      "name": "DDMRP zones, NFP, trigger, status, and order quantities reconcile",
+      "status": "PASS",
+      "detail": "All recommendations match independent formulas"
+    },
+    {
+      "name": "Signed spend ledger passes strict EUR 0.01 reconciliation",
+      "status": "PASS",
+      "detail": "Net EUR 143,686,430.21; gross EUR 143,777,263.42; credits EUR -90,833.21; difference EUR 0.00"
+    },
+    {
+      "name": "Spend transaction-line keys are unique and complete",
+      "status": "PASS",
+      "detail": "1,964 signed ledger lines"
+    },
+    {
+      "name": "Category and supplier Pareto calculations reconcile",
+      "status": "PASS",
+      "detail": "Positive-spend shares, cumulative ranks, and ABC classes match"
+    },
+    {
+      "name": "Monthly spend series is complete and reconciled",
+      "status": "PASS",
+      "detail": "24 contiguous ledger months"
+    },
+    {
+      "name": "Kraljic scores and quadrants reconcile to factor evidence",
+      "status": "PASS",
+      "detail": "All 10 category scores and 50/50 quadrant assignments match"
+    },
+    {
+      "name": "ABC/XYZ and ADI/CV2 segmentation independently reconcile",
+      "status": "PASS",
+      "detail": "All 80 item-location calculations match"
+    },
+    {
+      "name": "Forecast evaluation is leakage-free and protocol-complete",
+      "status": "PASS",
+      "detail": "80 SKUs x 7 models x 7 origins x 6 horizons; train-only seasonal scales"
+    },
+    {
+      "name": "Forecast ME/RMSE/MAE/MASE/RMSSE/WAPE/coverage scores reconcile",
+      "status": "PASS",
+      "detail": "All 560 model-score rows independently recomputed"
+    },
+    {
+      "name": "Forecast intervals and TiRex2 quantiles are ordered and truthfully labeled",
+      "status": "PASS",
+      "detail": "Classical 80/95% and TiRex2 q10-q90 semantics pass"
+    },
+    {
+      "name": "Per-SKU model selection follows the declared 2% simplicity rule",
+      "status": "PASS",
+      "detail": "Exactly one selected model per SKU"
+    },
+    {
+      "name": "Every candidate and selected model has a 12-month final forecast",
+      "status": "PASS",
+      "detail": "6,720 candidate rows; 960 selected rows"
+    },
+    {
+      "name": "Robust STL decomposition identities and strength features reconcile",
+      "status": "PASS",
+      "detail": "Observed = trend + seasonal + remainder for 80 series"
+    },
+    {
+      "name": "Forecast artifact manifest proves exact workbook and file provenance",
+      "status": "PASS",
+      "detail": "Workbook plus 18 artifacts verified"
+    }
+  ],
+  "warnings": [
+    {
+      "name": "Late supply remains eligible for NFP",
+      "status": "WARN",
+      "detail": "This is an explicit planning policy requiring execution review, not a calculation error.",
+      "count": 7
+    },
+    {
+      "name": "Kraljic threshold sensitivity",
+      "status": "WARN",
+      "detail": "At least one category is within five score points of a quadrant boundary; treat classification as a discussion aid.",
+      "count": 1
+    },
+    {
+      "name": "Synthetic contract commitments are implausibly low",
+      "status": "WARN",
+      "detail": "Current 12-month positive on-contract spend is 6.84x active annual commitments.",
+      "count": 6.84
+    },
+    {
+      "name": "Synthetic control is not independent",
+      "status": "WARN",
+      "detail": "Spend_Control is generated from the same ledger; it proves arithmetic reconciliation, not source-system completeness."
+    },
+    {
+      "name": "Seasonal evidence is limited",
+      "status": "WARN",
+      "detail": "Each series contains exactly three annual cycles; decomposition is diagnostic, not definitive.",
+      "count": 80
+    }
+  ],
+  "metrics": {
+    "demand_rows": 2880,
+    "sku_count": 80,
+    "history_months": 36,
+    "demand_patterns": {
+      "distribution": {
+        "Erratic": 18,
+        "Intermittent": 17,
+        "Lumpy": 15,
+        "Smooth": 30
+      },
+      "adi_range": [
+        1.0,
+        3.6
+      ],
+      "cv2_range": [
+        0.0024,
+        1.6607
+      ],
+      "target_mismatches": 0
+    },
+    "ddmrp": {
+      "positions": 80,
+      "status_counts": {
+        "Black": 16,
+        "Blue": 16,
+        "Green": 16,
+        "Red": 16,
+        "Yellow": 16
+      },
+      "late_eligible_supply_lines": 7
+    },
+    "spend": {
+      "line_count": 1964,
+      "net_eur": 143686430.21,
+      "gross_positive_eur": 143777263.42,
+      "credits_eur": -90833.21,
+      "contract_commitment_ratio": 6.8425
+    },
+    "forecast": {
+      "models": [
+        "ARIMA",
+        "Drift",
+        "ETS",
+        "Mean",
+        "Naive",
+        "Seasonal_Naive",
+        "TiRex2"
+      ],
+      "rolling_prediction_rows": 23520,
+      "score_rows": 560,
+      "selected_models": {
+        "ARIMA": 4,
+        "ETS": 2,
+        "Mean": 22,
+        "Naive": 3,
+        "Seasonal_Naive": 12,
+        "TiRex2": 37
+      },
+      "tirex2_selected_skus": 37,
+      "tirex2_raw_quantile_crossings": 38,
+      "tirex2_rearranged_points": 28
+    },
+    "workbook_sha256": "369e0d009f0cd28c71a2e8acbfa5811fb579f3e93c90cf444cf62aaa9fdf07c2"
+  }
+}

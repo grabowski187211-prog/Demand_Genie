@@ -43,6 +43,15 @@ This file tracks timestamped project work for OpenAI Build Week.
 - Added exact workbook/artifact SHA-256 provenance, strict missing-input and EUR 0.01 decision gates, and visible warnings for synthetic-data and policy limitations.
 - Added an independent audit that passed 22 calculation controls across demand, DDMRP, spend, segmentation, forecasts, intervals, selection, decomposition, and file provenance. Desktop/mobile Playwright tests also passed corrupted-upload, blocked-DDMRP, keyboard, rendering, and overflow cases.
 
+## 2026-07-21 17:40 CEST
+
+- Confirmed the original ADI/CV2 display was mathematically correct but exposed a weak synthetic fixture: all 80 histories had positive demand every month, forcing ADI to 1 and placing every item in the smooth quadrant.
+- Preserved Dashboard V4 and created a separate V5 workbook with validated item-level occurrence and demand-size patterns: 30 smooth, 18 erratic, 17 intermittent, and 15 lumpy SKUs. ADI now spans 1.0-3.6 and CV2 spans 0.002-1.661.
+- Rebuilt all DDMRP source facts, buffer settings, net-flow recommendations, spend segmentation, classical rolling-origin forecasts, TiRex2 forecasts, and robust STL components against the V5 histories.
+- Detected 38 raw TiRex2 quantile crossings across 28 backtest points. Added declared non-negative clipping and monotone rearrangement, retained raw crossing evidence, and verified zero unresolved crossings.
+- Built `dashboard-v5.html` with a visible pattern mix, all four ADI/CV2 quadrants, threshold labels, and an exception queue ranked lumpy, intermittent, erratic, then smooth.
+- Passed 23 independent calculation controls plus desktop/mobile rendering, exact-hash upload, corrupted-upload, missing-DDMRP-input, export, keyboard, and overflow tests.
+
 ## Codex Collaboration Notes
 
 Add entries here as major features are designed and built. Include:
