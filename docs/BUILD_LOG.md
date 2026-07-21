@@ -34,6 +34,15 @@ This file tracks timestamped project work for OpenAI Build Week.
 - Built `dashboard-v3.html` as a standalone seven-view supply-chain workbench with dynamic commercial filters, spend and supplier Pareto analysis, review prompts with no savings claim, a Kraljic bubble portfolio, and modern item segmentation.
 - Added repeatable workbook and Playwright tests. Version 3 passed desktop and mobile browser verification with workbook re-upload, export, interaction, chart-rendering, console-error, and page-overflow checks.
 
+## 2026-07-21 17:05 CEST
+
+- Preserved the byte-level hashes of Versions 1-3 and built `dashboard-v4.html` as a separate iteration.
+- Replaced the single holdout with seven expanding-window origins and 42 out-of-sample errors per SKU/model. Recomputed ME, RMSE, MAE, MASE, RMSSE, WAPE, bias, and empirical interval coverage from training-only scales.
+- Ran the official TiRex2 0.1.1 package and `NX-AI/TiRex-2` checkpoint locally for all 80 SKUs. TiRex2 won raw RMSE for 18 SKUs and was selected for 15 after the declared 2% simplicity rule.
+- Added robust monthly STL decomposition with aligned observed, trend, seasonal, and remainder small multiples plus explicit three-cycle evidence limits.
+- Added exact workbook/artifact SHA-256 provenance, strict missing-input and EUR 0.01 decision gates, and visible warnings for synthetic-data and policy limitations.
+- Added an independent audit that passed 22 calculation controls across demand, DDMRP, spend, segmentation, forecasts, intervals, selection, decomposition, and file provenance. Desktop/mobile Playwright tests also passed corrupted-upload, blocked-DDMRP, keyboard, rendering, and overflow cases.
+
 ## Codex Collaboration Notes
 
 Add entries here as major features are designed and built. Include:

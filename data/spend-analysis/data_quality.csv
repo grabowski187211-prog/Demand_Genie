@@ -11,7 +11,7 @@ Raw supplier coverage by positive spend,1.0,PASS,A source supplier is required f
 Category coverage by positive spend,1.0,PASS,Unclassified spend must remain visible
 Normalized supplier coverage by positive spend,1.0,INFO,Raw supplier fallback is used when absent
 Contract-status coverage by positive spend,1.0,INFO,Unknown is not treated as off-contract
-Control-total reconciliation,0.0,PASS,Analyzed 143686430.21; control 143686430.21; tolerance 143.68643021
+Control-total reconciliation,0.0,PASS,Analyzed 143686430.21; control 143686430.21; tolerance 0.01
 Demand rows,2880,INFO,Valid numeric/date rows
 Demand item-locations,80,INFO,Segmentation grain
 Incomplete demand histories,0,PASS,Missing periods are not converted to zero

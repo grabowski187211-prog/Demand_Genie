@@ -137,6 +137,15 @@ def month_text(value: Any) -> str | None:
     return parsed[:7] if parsed else None
 
 
+def continuous_months(first: str, last: str) -> list[str]:
+    """Return every YYYY-MM period in the inclusive range."""
+    first_year, first_month = (int(part) for part in first.split("-"))
+    last_year, last_month = (int(part) for part in last.split("-"))
+    start = first_year * 12 + first_month - 1
+    stop = last_year * 12 + last_month - 1
+    return [f"{index // 12:04d}-{index % 12 + 1:02d}" for index in range(start, stop + 1)]
+
+
 def boolean(value: Any) -> bool | None:
     raw = text(value).lower()
     if raw in {"true", "yes", "y", "1", "on contract", "preferred"}:
@@ -355,7 +364,7 @@ def spend_quality(raw_count: int, rows: list[dict[str, Any]], counters: dict[str
     currencies = sorted({text(row.get("Base_Currency")) for row in rows if text(row.get("Base_Currency"))})
     analyzed = sum(row["Spend_Base"] for row in rows)
     difference = analyzed - args.control_total if args.control_total is not None else None
-    tolerance = max(0.01, abs(args.control_total or 0) * 1e-6)
+    tolerance = 0.01
     key_gaps = sum(
         1
         for row in rows
@@ -436,7 +445,8 @@ def demand_pattern(adi: float | None, cv2: float | None, adi_boundary: float, cv
 
 
 def item_segmentation(rows: list[dict[str, Any]], args: argparse.Namespace) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
-    expected_periods = sorted({row["Period"] for row in rows})
+    observed_periods = sorted({row["Period"] for row in rows})
+    expected_periods = continuous_months(observed_periods[0], observed_periods[-1]) if observed_periods else []
     groups: defaultdict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
     for row in rows:
         groups[(text(row.get("Part_ID")), text(row.get("Location")))].append(row)

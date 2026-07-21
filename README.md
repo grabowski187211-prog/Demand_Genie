@@ -31,10 +31,13 @@ Each iteration remains available as a standalone HTML file:
 - [Version 1](index.html): demand-monitoring MVP.
 - [Version 2](dashboard-v2.html): forecasting and DDMRP planning workbench.
 - [Version 3](dashboard-v3.html): forecasting, DDMRP, procurement spend, supplier exposure, Kraljic strategy, and modern item segmentation.
+- [Version 4](dashboard-v4.html): independently audited forecasting and planning workbench with real TiRex2 inference, rolling-origin selection, robust STL decomposition, strict upload provenance, and visible decision gates.
 
-Open `dashboard-v3.html` directly in a modern browser. No application server or network connection is required. Load the sample Excel workbook from the dashboard to exercise the same upload path used for an ERP or procurement extract.
+Open `dashboard-v4.html` directly in a modern browser. No application server or network connection is required. Load the sample Excel workbook from the dashboard to exercise the same upload path used for an ERP or procurement extract.
 
-Version 3 includes seven operational views: Replenishment, Forecast, Spend, Portfolio, Execution, Buffers, and Data. Commercial exports are review queues and do not claim booked savings.
+Version 4 includes seven operational views: Replenishment, Forecast, Spend, Portfolio, Execution, Buffers, and Data. Commercial exports are review queues and do not claim booked savings. Versions 1-3 remain unchanged and available for comparison.
+
+The packaged V4 forecast artifacts are accepted only when the uploaded workbook SHA-256 matches the analyzed sample workbook. Other uploads use clearly labeled browser benchmarks; they do not claim to have run ARIMA or TiRex2 in the browser.
 
 ## Sample Data
 
@@ -58,17 +61,38 @@ python3 scripts/analyze_spend.py data/Demand_Genie_Synthetic_Demand_History.xlsx
 python3 scripts/validate_workbook_v3.py
 ```
 
-Build the self-contained dashboard after changing source files or data:
+Build and audit the self-contained V4 dashboard after changing source files or data:
 
 ```bash
-python3 scripts/build_dashboard_v3.py
+python3 scripts/analyze_spend.py data/Demand_Genie_Synthetic_Demand_History.xlsx data/spend-analysis --control-total 143686430.21
+python3 scripts/test_spend_analysis.py
+python3 scripts/build_dashboard_v4.py
+python3 scripts/audit_project_v4.py
 ```
+
+The independent audit recomputes DDMRP zones and orders, signed spend and Pareto outputs, ABC/XYZ and ADI/CV2 segmentation, 23,520 rolling-origin predictions, model selection, interval ordering, STL identities, artifact hashes, and the immutable hashes of dashboards V1-V3. Its machine-readable result is [data/audit-v4.json](data/audit-v4.json).
+
+### Rebuild Forecasts
+
+Classical forecasts require R with `fpp3`, `readxl`, and `readr`. TiRex2 0.1.1 requires Python 3.11-3.13 and first-download access to the gated `NX-AI/TiRex-2` Hugging Face model. The generated CSV artifacts are bundled into the standalone dashboard, so dashboard users do not need R, Python, model access, or a network connection.
+
+```bash
+python3.13 -m venv .venv
+.venv/bin/pip install -r requirements-tirex2.txt
+Rscript scripts/run_forecast_analysis_v4.R data/Demand_Genie_Synthetic_Demand_History.xlsx data/forecast-v4
+.venv/bin/python scripts/run_tirex2_forecasts.py data/Demand_Genie_Synthetic_Demand_History.xlsx data/forecast-v4
+.venv/bin/python scripts/merge_forecast_analysis_v4.py data/forecast-v4
+python3 scripts/build_dashboard_v4.py
+python3 scripts/audit_project_v4.py
+```
+
+V4 evaluates Mean, Naive, Drift, Seasonal Naive, ETS, ARIMA, and TiRex2 over seven expanding-window origins with six months per origin. It selects per-SKU RMSE over 42 out-of-sample points, preferring the least-complex candidate within 2% of the minimum RMSE. MASE and RMSSE scales use only each origin's training history.
 
 Optional browser verification requires Python Playwright with Chromium and a local server:
 
 ```bash
 python3 -m http.server 8001
-python3 scripts/test_dashboard_v3.py http://localhost:8001/dashboard-v3.html
+python3 scripts/test_dashboard_v4.py http://localhost:8001/dashboard-v4.html
 ```
 
 ### Dashboard Design
