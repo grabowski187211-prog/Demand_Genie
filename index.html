@@ -1,0 +1,749 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Demand Genie is a standalone demand planning dashboard for manufacturing planners.">
+  <title>Demand Genie | Demand Control</title>
+  <style>
+    :root {
+      --ink: #17262b;
+      --muted: #5b6a6e;
+      --faint: #8a9798;
+      --page: #f7f9f9;
+      --surface: #ffffff;
+      --line: #d4dcdd;
+      --grid: #e7ecec;
+      --teal: #216b78;
+      --teal-soft: #dbecef;
+      --green: #3e735c;
+      --green-soft: #e0ece5;
+      --amber: #996600;
+      --amber-soft: #f6edd7;
+      --red: #a54745;
+      --red-soft: #f4e2e1;
+      --focus: #124d58;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      background: var(--page);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    button, select { font: inherit; }
+
+    button:focus-visible, select:focus-visible, tr:focus-visible {
+      outline: 3px solid #77b6c3;
+      outline-offset: 2px;
+    }
+
+    .app-shell {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 24px 32px 36px;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: minmax(260px, 1fr) auto;
+      gap: 24px;
+      align-items: end;
+      padding: 0 0 18px;
+      border-bottom: 2px solid var(--ink);
+    }
+
+    .eyebrow, .section-kicker, .control label, .metric-label, th {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .eyebrow { margin: 0 0 4px; }
+
+    h1, h2, p { margin: 0; }
+
+    h1 {
+      font-size: 27px;
+      font-weight: 700;
+      line-height: 1.05;
+    }
+
+    h2 {
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .header-summary {
+      max-width: 720px;
+      color: var(--muted);
+      margin-top: 7px;
+    }
+
+    .last-updated {
+      color: var(--muted);
+      font-size: 12px;
+      text-align: right;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: end;
+      gap: 12px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .control {
+      display: grid;
+      gap: 4px;
+      min-width: 170px;
+    }
+
+    .control label { font-size: 10px; }
+
+    select {
+      min-height: 34px;
+      border: 1px solid #aab6b8;
+      border-radius: 3px;
+      background: var(--surface);
+      color: var(--ink);
+      padding: 6px 28px 6px 9px;
+    }
+
+    .context-note {
+      margin-left: auto;
+      color: var(--muted);
+      font-size: 12px;
+      padding-bottom: 7px;
+    }
+
+    .attention {
+      display: grid;
+      grid-template-columns: 1.1fr repeat(3, minmax(150px, 1fr));
+      border-bottom: 1px solid var(--line);
+    }
+
+    .attention-heading, .metric {
+      padding: 16px 18px 15px 0;
+      min-height: 102px;
+    }
+
+    .attention-heading { padding-right: 28px; }
+
+    .attention-heading p:last-child {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .metric {
+      border-left: 1px solid var(--line);
+      padding-left: 18px;
+    }
+
+    .metric-value {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .metric-value strong {
+      font-size: 25px;
+      line-height: 1;
+    }
+
+    .metric-value span, .metric-detail { color: var(--muted); font-size: 12px; }
+    .metric-detail { margin-top: 5px; }
+
+    .status {
+      display: inline-block;
+      min-width: 68px;
+      border-radius: 2px;
+      padding: 2px 6px;
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .status.good { background: var(--green-soft); color: #23513f; }
+    .status.watch { background: var(--amber-soft); color: #704b00; }
+    .status.high { background: var(--red-soft); color: #762b2b; }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(350px, 0.8fr);
+      gap: 28px;
+      padding: 22px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .panel { min-width: 0; }
+    .panel + .panel { border-left: 1px solid var(--line); padding-left: 28px; }
+
+    .panel-head {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 12px;
+    }
+
+    .panel-subtitle {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 3px;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .legend-item { display: inline-flex; align-items: center; gap: 5px; }
+    .key { width: 18px; height: 2px; background: var(--ink); display: inline-block; }
+    .key.forecast { background: var(--teal); border-top: 1px dashed var(--teal); }
+    .key.boundary { width: 0; height: 14px; border-left: 1px dashed var(--faint); }
+
+    .chart-wrap { position: relative; height: 292px; }
+    .main-chart { width: 100%; height: 100%; display: block; overflow: visible; }
+    .chart-tooltip {
+      position: absolute;
+      display: none;
+      z-index: 2;
+      max-width: 190px;
+      border: 1px solid var(--ink);
+      background: var(--surface);
+      color: var(--ink);
+      padding: 7px 8px;
+      box-shadow: 2px 2px 0 rgba(23, 38, 43, 0.12);
+      font-size: 12px;
+      pointer-events: none;
+    }
+
+    .chart-tooltip strong { display: block; margin-bottom: 2px; }
+
+    .model-list { display: grid; gap: 13px; }
+    .model-row { display: grid; grid-template-columns: 1.25fr 1fr 1fr; gap: 10px; align-items: center; }
+    .model-name { font-weight: 650; font-size: 13px; }
+    .model-name small { display: block; color: var(--muted); font-size: 11px; font-weight: 400; margin-top: 1px; }
+    .measure { color: var(--muted); font-size: 11px; }
+    .measure strong { color: var(--ink); display: block; font-size: 13px; margin-top: 2px; }
+    .bullet { position: relative; height: 13px; margin-top: 4px; background: #edf1f1; overflow: hidden; }
+    .bullet .range { position: absolute; inset: 0 auto 0 0; background: #dce7e3; }
+    .bullet .value { position: absolute; top: 3px; bottom: 3px; left: 0; background: var(--teal); }
+    .bullet .target { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--ink); }
+    .model-row.active .model-name { color: var(--teal); }
+    .model-row.active .value { background: var(--green); }
+
+    .diagnostic-note {
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 17px;
+      padding-top: 13px;
+    }
+
+    .exceptions { padding-top: 21px; }
+    .exceptions-header { display: flex; justify-content: space-between; align-items: end; gap: 16px; margin-bottom: 10px; }
+    .exceptions-header p { color: var(--muted); font-size: 12px; margin-top: 3px; }
+    .table-wrap { overflow-x: auto; border-top: 1px solid var(--ink); }
+    table { width: 100%; border-collapse: collapse; min-width: 870px; }
+    th { padding: 9px 10px; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; }
+    th:first-child, th:nth-child(2), th:nth-child(3) { text-align: left; }
+    td { padding: 10px; border-bottom: 1px solid var(--line); text-align: right; vertical-align: middle; font-variant-numeric: tabular-nums; }
+    td:first-child, td:nth-child(2), td:nth-child(3) { text-align: left; }
+    tbody tr { cursor: pointer; }
+    tbody tr:hover { background: #edf4f4; }
+    tbody tr.selected { background: #e0eef0; box-shadow: inset 3px 0 0 var(--teal); }
+    .part-id { color: var(--teal); font-weight: 700; }
+    .part-name { color: var(--muted); font-size: 12px; }
+    .numeric-negative { color: #7c3130; font-weight: 650; }
+    .numeric-positive { color: #255b48; font-weight: 650; }
+    .spark { width: 104px; height: 25px; display: block; }
+
+    .footer-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-top: 15px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .download {
+      border: 1px solid var(--ink);
+      border-radius: 3px;
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      padding: 6px 10px;
+      font-weight: 700;
+    }
+    .download:hover { background: var(--ink); color: var(--surface); }
+
+    @media (max-width: 920px) {
+      .app-shell { padding: 20px; }
+      .topbar { grid-template-columns: 1fr; }
+      .last-updated { text-align: left; }
+      .context-note { width: 100%; margin-left: 0; }
+      .attention { grid-template-columns: 1fr 1fr; }
+      .attention-heading { grid-column: 1 / -1; min-height: auto; border-bottom: 1px solid var(--line); }
+      .dashboard-grid { grid-template-columns: 1fr; gap: 20px; }
+      .panel + .panel { border-left: 0; border-top: 1px solid var(--line); padding: 20px 0 0; }
+    }
+
+    @media (max-width: 600px) {
+      .app-shell { padding: 16px; }
+      h1 { font-size: 24px; }
+      .controls { display: grid; grid-template-columns: 1fr; }
+      .control { min-width: 0; }
+      .attention { grid-template-columns: 1fr; }
+      .metric { border-left: 0; border-top: 1px solid var(--line); padding-left: 0; min-height: auto; }
+      .panel-head { display: block; }
+      .legend { justify-content: flex-start; margin-top: 8px; }
+      .chart-wrap { height: 260px; }
+      .model-row { grid-template-columns: 1.1fr 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Demand Genie / Daily Demand Control</p>
+        <h1>What needs a planner's attention today?</h1>
+        <p class="header-summary">Monitor forecast performance, demand direction, and the parts where plan divergence creates the next supply or inventory decision.</p>
+      </div>
+      <p class="last-updated">Sample planning data<br><strong>Last refreshed: 07 May 2026, 07:30</strong></p>
+    </header>
+
+    <section class="controls" aria-label="Dashboard filters">
+      <div class="control">
+        <label for="family-filter">Product family</label>
+        <select id="family-filter">
+          <option value="All">All families</option>
+        </select>
+      </div>
+      <div class="control">
+        <label for="part-filter">Part</label>
+        <select id="part-filter">
+          <option value="All">All selected parts</option>
+        </select>
+      </div>
+      <div class="control">
+        <label for="model-filter">Forecast model</label>
+        <select id="model-filter">
+          <option value="Seasonal baseline">Seasonal baseline</option>
+          <option value="Weighted trend">Weighted trend</option>
+          <option value="Consensus plan">Consensus plan</option>
+        </select>
+      </div>
+      <p class="context-note" id="filter-context">Actuals through Apr 2026 | Forecast horizon May-Jul 2026</p>
+    </section>
+
+    <section class="attention" aria-labelledby="attention-title">
+      <div class="attention-heading">
+        <p class="section-kicker">Planner attention</p>
+        <h2 id="attention-title" data-headline>Forecast performance is within tolerance.</h2>
+        <p data-summary>Two items need review before the next supplier call.</p>
+      </div>
+      <div class="metric">
+        <p class="metric-label">Forecast error</p>
+        <div class="metric-value"><strong id="wape-value">14.2%</strong><span id="wape-status" class="status good">Within target</span></div>
+        <p class="metric-detail" id="wape-detail">WAPE target: 18.0% or lower</p>
+      </div>
+      <div class="metric">
+        <p class="metric-label">Forecast bias</p>
+        <div class="metric-value"><strong id="bias-value">+2.3%</strong><span id="bias-status" class="status good">Balanced</span></div>
+        <p class="metric-detail" id="bias-detail">Tolerance: between -4.0% and +4.0%</p>
+      </div>
+      <div class="metric">
+        <p class="metric-label">Supply risk</p>
+        <div class="metric-value"><strong id="risk-value">2</strong><span id="risk-status" class="status watch">Review</span></div>
+        <p class="metric-detail" id="risk-detail">Parts above 20% forecast variance</p>
+      </div>
+    </section>
+
+    <section class="dashboard-grid">
+      <article class="panel">
+        <div class="panel-head">
+          <div>
+            <p class="section-kicker">Demand versus forecast</p>
+            <h2 id="trend-title">All selected parts</h2>
+            <p class="panel-subtitle" id="trend-subtitle">Monthly units. Actuals provide the context for the forecast horizon.</p>
+          </div>
+          <div class="legend" aria-label="Chart legend">
+            <span class="legend-item"><i class="key"></i>Actual demand</span>
+            <span class="legend-item"><i class="key forecast"></i>Selected forecast</span>
+            <span class="legend-item"><i class="key boundary"></i>Forecast horizon</span>
+          </div>
+        </div>
+        <div class="chart-wrap" id="chart-wrap">
+          <svg class="main-chart" id="main-chart" role="img" aria-label="Demand and forecast line chart"></svg>
+          <div class="chart-tooltip" id="chart-tooltip"></div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head">
+          <div>
+            <p class="section-kicker">Model comparison</p>
+            <h2>Accuracy against tolerance</h2>
+            <p class="panel-subtitle">WAPE compares historical forecast error. Bias exposes systematic over or under forecasting.</p>
+          </div>
+        </div>
+        <div class="model-list" id="model-list"></div>
+        <p class="diagnostic-note" id="diagnostic-note">A forecast can be accurate on average yet consistently biased. Review both measures before choosing a planning signal.</p>
+      </article>
+    </section>
+
+    <section class="exceptions" aria-labelledby="exceptions-title">
+      <div class="exceptions-header">
+        <div>
+          <p class="section-kicker">Exception queue</p>
+          <h2 id="exceptions-title">Parts ranked by planning risk</h2>
+          <p>Click a part to inspect its demand and forecast context above.</p>
+        </div>
+        <p id="queue-summary">Ranked by forecast variance and supply exposure.</p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Part</th>
+              <th scope="col">Description</th>
+              <th scope="col">Signal</th>
+              <th scope="col">Current forecast</th>
+              <th scope="col">Prior actual</th>
+              <th scope="col">Variance</th>
+              <th scope="col">WAPE</th>
+              <th scope="col">Demand pattern</th>
+            </tr>
+          </thead>
+          <tbody id="exception-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="footer-bar">
+      <p>Standalone demo. Replace the sample dataset in <code>index.html</code> with an ERP or planning-system extract to use the dashboard with live data.</p>
+      <button class="download" id="download-csv" type="button">Download exception queue</button>
+    </footer>
+  </main>
+
+  <script>
+    const MONTHS = [
+      "Jun 25", "Jul 25", "Aug 25", "Sep 25", "Oct 25", "Nov 25", "Dec 25",
+      "Jan 26", "Feb 26", "Mar 26", "Apr 26", "May 26", "Jun 26", "Jul 26"
+    ];
+    const ACTUAL_COUNT = 11;
+    const MODEL_FACTORS = {
+      "Seasonal baseline": { wape: 14.2, bias: 2.3, future: [1.0, 1.01, 1.03] },
+      "Weighted trend": { wape: 16.4, bias: -5.1, future: [0.98, 1.0, 1.01] },
+      "Consensus plan": { wape: 19.1, bias: 8.4, future: [1.08, 1.1, 1.12] }
+    };
+    const PARTS = [
+      { id: "04222", family: "Bearings", name: "Axial bearing assembly", base: 575, phase: 0.3, volatility: 0.08, lead: 10, exposure: 1.2, bias: 0.11 },
+      { id: "60350.50011", family: "Gearboxes", name: "Drive gearbox housing", base: 246, phase: 0.8, volatility: 0.12, lead: 14, exposure: 1.45, bias: -0.19 },
+      { id: "60350.10011", family: "Gearboxes", name: "Precision gearbox cover", base: 228, phase: 1.6, volatility: 0.1, lead: 12, exposure: 1.15, bias: -0.05 },
+      { id: "04234.0", family: "Bearings", name: "Main spindle bearing", base: 396, phase: 2.1, volatility: 0.09, lead: 8, exposure: 1.05, bias: 0.04 },
+      { id: "04223", family: "Bearings", name: "Bearing kit, premium", base: 342, phase: 2.6, volatility: 0.13, lead: 11, exposure: 1.3, bias: 0.17 },
+      { id: "04326.0BA", family: "Pumps", name: "Hydraulic pump seal", base: 279, phase: 3.2, volatility: 0.17, lead: 6, exposure: 1.4, bias: -0.12 },
+      { id: "60385.10011", family: "Controls", name: "Control valve module", base: 190, phase: 4.0, volatility: 0.22, lead: 16, exposure: 1.55, bias: 0.26 },
+      { id: "04233.02", family: "Bearings", name: "Radial bearing set", base: 163, phase: 4.8, volatility: 0.15, lead: 7, exposure: 0.9, bias: 0.03 },
+      { id: "04227.03AA", family: "Pumps", name: "Pump impeller assembly", base: 147, phase: 5.4, volatility: 0.19, lead: 9, exposure: 1.25, bias: -0.16 },
+      { id: "04222.1", family: "Controls", name: "Sensor interface collar", base: 108, phase: 6.0, volatility: 0.16, lead: 13, exposure: 1.1, bias: 0.08 }
+    ];
+
+    const state = {
+      family: "All",
+      part: "All",
+      model: "Seasonal baseline"
+    };
+
+    const $ = (selector) => document.querySelector(selector);
+    const formatUnits = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 });
+    const formatPercent = (value) => `${value > 0 ? "+" : ""}${value.toFixed(1)}%`;
+
+    function selectedParts() {
+      return PARTS.filter((part) =>
+        (state.family === "All" || part.family === state.family) &&
+        (state.part === "All" || part.id === state.part)
+      );
+    }
+
+    function actualFor(part, index) {
+      const seasonal = Math.sin((index + part.phase) * 0.73) * 0.14;
+      const movement = Math.cos((index * 1.7) + part.phase) * part.volatility;
+      const trend = index > 7 ? (index - 7) * 0.017 : 0;
+      return Math.max(0, Math.round(part.base * (1 + seasonal + movement + trend)));
+    }
+
+    function forecastFor(part, index, modelName) {
+      const model = MODEL_FACTORS[modelName];
+      const actual = actualFor(part, Math.min(index, ACTUAL_COUNT - 1));
+      const historicalNoise = Math.sin((index + part.phase) * 1.3) * 0.045;
+      if (index < ACTUAL_COUNT) {
+        return Math.round(actual * (1 + part.bias + historicalNoise + model.bias / 100));
+      }
+      const futureOffset = index - ACTUAL_COUNT;
+      const recent = actualFor(part, ACTUAL_COUNT - 1);
+      const seasonal = 1 + Math.sin((index + part.phase) * 0.73) * 0.12;
+      return Math.max(0, Math.round(recent * seasonal * model.future[futureOffset] * (1 + part.bias * 0.5)));
+    }
+
+    function aggregateSeries(parts) {
+      return MONTHS.map((month, index) => ({
+        month,
+        actual: index < ACTUAL_COUNT ? parts.reduce((sum, part) => sum + actualFor(part, index), 0) : null,
+        forecast: parts.reduce((sum, part) => sum + forecastFor(part, index, state.model), 0)
+      }));
+    }
+
+    function metricFor(parts) {
+      const model = MODEL_FACTORS[state.model];
+      const weightedBias = parts.reduce((sum, part) => sum + part.bias * part.base, 0) / parts.reduce((sum, part) => sum + part.base, 0);
+      const volatility = parts.reduce((sum, part) => sum + part.volatility, 0) / parts.length;
+      const wape = Math.max(5, model.wape + (volatility - 0.14) * 22 + Math.abs(weightedBias) * 5);
+      const bias = model.bias + weightedBias * 100 * 0.52;
+      return { wape, bias };
+    }
+
+    function partMetrics(part) {
+      let absoluteError = 0;
+      let demand = 0;
+      let signedError = 0;
+      for (let index = 0; index < ACTUAL_COUNT; index += 1) {
+        const actual = actualFor(part, index);
+        const forecast = forecastFor(part, index, state.model);
+        absoluteError += Math.abs(forecast - actual);
+        signedError += forecast - actual;
+        demand += actual;
+      }
+      const currentForecast = forecastFor(part, ACTUAL_COUNT, state.model);
+      const priorActual = actualFor(part, ACTUAL_COUNT - 1);
+      const variance = (currentForecast - priorActual) / priorActual * 100;
+      const wape = absoluteError / demand * 100;
+      const bias = signedError / demand * 100;
+      const riskScore = Math.abs(variance) * part.exposure + Math.max(0, part.lead - 7) * 1.4 + wape * 0.25;
+      let signal = "Stable";
+      if (riskScore >= 37) signal = "High risk";
+      else if (riskScore >= 25) signal = "Watch";
+      return { currentForecast, priorActual, variance, wape, bias, riskScore, signal };
+    }
+
+    function setStatus(element, type, text) {
+      element.className = `status ${type}`;
+      element.textContent = text;
+    }
+
+    function populateFilters() {
+      const familyFilter = $("#family-filter");
+      const partFilter = $("#part-filter");
+      const families = [...new Set(PARTS.map((part) => part.family))];
+      familyFilter.innerHTML = '<option value="All">All families</option>' + families.map((family) => `<option value="${family}">${family}</option>`).join("");
+      partFilter.innerHTML = '<option value="All">All selected parts</option>' + PARTS.map((part) => `<option value="${part.id}">${part.id} | ${part.name}</option>`).join("");
+    }
+
+    function drawChart(series) {
+      const svg = $("#main-chart");
+      const wrap = $("#chart-wrap");
+      const width = Math.max(480, wrap.clientWidth);
+      const height = Math.max(230, wrap.clientHeight);
+      const margin = { top: 18, right: 20, bottom: 30, left: 52 };
+      const plotWidth = width - margin.left - margin.right;
+      const plotHeight = height - margin.top - margin.bottom;
+      const allValues = series.flatMap((point) => [point.actual, point.forecast]).filter(Number.isFinite);
+      const min = Math.max(0, Math.floor(Math.min(...allValues) / 500) * 500 - 500);
+      const max = Math.ceil(Math.max(...allValues) / 500) * 500 + 500;
+      const x = (index) => margin.left + (index / (series.length - 1)) * plotWidth;
+      const y = (value) => margin.top + (1 - (value - min) / (max - min)) * plotHeight;
+      const actualPath = series.slice(0, ACTUAL_COUNT).map((point, index) => `${index === 0 ? "M" : "L"}${x(index)},${y(point.actual)}`).join(" ");
+      const forecastPath = series.map((point, index) => `${index === 0 ? "M" : "L"}${x(index)},${y(point.forecast)}`).join(" ");
+      const horizonX = x(ACTUAL_COUNT - 0.5);
+      const gridValues = [0, 0.25, 0.5, 0.75, 1].map((fraction) => min + fraction * (max - min));
+      const grid = gridValues.map((value) => `<g><line x1="${margin.left}" y1="${y(value)}" x2="${width - margin.right}" y2="${y(value)}" stroke="#e7ecec"/><text x="${margin.left - 9}" y="${y(value) + 4}" text-anchor="end" fill="#5b6a6e" font-size="11">${formatUnits.format(value)}</text></g>`).join("");
+      const labels = series.map((point, index) => {
+        if (index % 2 !== 0 && index !== ACTUAL_COUNT - 1) return "";
+        return `<text x="${x(index)}" y="${height - 8}" text-anchor="middle" fill="#5b6a6e" font-size="10">${point.month}</text>`;
+      }).join("");
+      const points = series.map((point, index) => {
+        const actualPoint = point.actual === null ? "" : `<circle class="chart-point" data-index="${index}" data-kind="actual" cx="${x(index)}" cy="${y(point.actual)}" r="5" fill="transparent" tabindex="0" aria-label="${point.month}, actual demand ${formatUnits.format(point.actual)} units"></circle>`;
+        return `${actualPoint}<circle class="chart-point" data-index="${index}" data-kind="forecast" cx="${x(index)}" cy="${y(point.forecast)}" r="5" fill="transparent" tabindex="0" aria-label="${point.month}, forecast ${formatUnits.format(point.forecast)} units"></circle>`;
+      }).join("");
+      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+      svg.innerHTML = `
+        <title>Demand compared with selected forecast</title>
+        <desc>Actual demand is shown in charcoal. The selected forecast is shown in teal. The dotted divider marks the forecast horizon.</desc>
+        ${grid}
+        <line x1="${horizonX}" y1="${margin.top}" x2="${horizonX}" y2="${height - margin.bottom}" stroke="#8a9798" stroke-dasharray="4 4"/>
+        <text x="${horizonX + 6}" y="${margin.top + 12}" fill="#5b6a6e" font-size="10">Forecast horizon</text>
+        <path d="${forecastPath}" fill="none" stroke="#216b78" stroke-width="2.4" stroke-dasharray="7 4"/>
+        <path d="${actualPath}" fill="none" stroke="#17262b" stroke-width="2.4"/>
+        ${labels}
+        ${points}
+      `;
+      svg.querySelectorAll(".chart-point").forEach((point) => {
+        const showTooltip = (event) => {
+          const datum = series[Number(point.dataset.index)];
+          const isActual = point.dataset.kind === "actual";
+          const tooltip = $("#chart-tooltip");
+          tooltip.innerHTML = `<strong>${datum.month}</strong>${isActual ? "Actual demand" : state.model}: ${formatUnits.format(isActual ? datum.actual : datum.forecast)} units`;
+          tooltip.style.display = "block";
+          const rect = wrap.getBoundingClientRect();
+          const clientX = event.clientX || rect.left + Number(point.getAttribute("cx"));
+          const clientY = event.clientY || rect.top + Number(point.getAttribute("cy"));
+          tooltip.style.left = `${Math.min(rect.width - 185, Math.max(0, clientX - rect.left + 10))}px`;
+          tooltip.style.top = `${Math.max(0, clientY - rect.top - 52)}px`;
+        };
+        point.addEventListener("mouseenter", showTooltip);
+        point.addEventListener("focus", showTooltip);
+        point.addEventListener("mouseleave", () => { $("#chart-tooltip").style.display = "none"; });
+        point.addEventListener("blur", () => { $("#chart-tooltip").style.display = "none"; });
+      });
+    }
+
+    function drawModels(parts) {
+      const list = $("#model-list");
+      list.innerHTML = Object.entries(MODEL_FACTORS).map(([name, model]) => {
+        const adjusted = metricFor(parts);
+        const wape = name === state.model ? adjusted.wape : Math.max(5, model.wape + (adjusted.wape - MODEL_FACTORS[state.model].wape));
+        const weightedBias = parts.reduce((sum, part) => sum + part.bias, 0) / parts.length * 100 * 0.52;
+        const bias = model.bias + weightedBias;
+        const valueWidth = Math.min(100, wape / 25 * 100);
+        const rangeWidth = 18 / 25 * 100;
+        const biasLabel = formatPercent(bias);
+        return `<div class="model-row ${name === state.model ? "active" : ""}">
+          <div class="model-name">${name}<small>${name === "Seasonal baseline" ? "Seasonality with stable trend" : name === "Weighted trend" ? "Recent demand weighted more heavily" : "Sales and operations plan"}</small></div>
+          <div class="measure">WAPE<strong>${wape.toFixed(1)}%</strong><div class="bullet" aria-label="WAPE ${wape.toFixed(1)} percent against 18 percent target"><span class="range" style="width:${rangeWidth}%"></span><span class="value" style="width:${valueWidth}%"></span><span class="target" style="left:${rangeWidth}%"></span></div></div>
+          <div class="measure">Bias<strong class="${Math.abs(bias) > 4 ? "numeric-negative" : ""}">${biasLabel}</strong><small>${Math.abs(bias) <= 4 ? "Within +/-4% tolerance" : "Outside +/-4% tolerance"}</small></div>
+        </div>`;
+      }).join("");
+    }
+
+    function sparkline(part) {
+      const values = Array.from({ length: ACTUAL_COUNT }, (_, index) => actualFor(part, index));
+      const min = Math.min(...values);
+      const max = Math.max(...values);
+      const x = (index) => 2 + (index / (values.length - 1)) * 98;
+      const y = (value) => 22 - ((value - min) / Math.max(1, max - min)) * 18;
+      const points = values.map((value, index) => `${x(index)},${y(value)}`).join(" ");
+      return `<svg class="spark" viewBox="0 0 104 25" role="img" aria-label="Demand pattern for ${part.id}"><line x1="0" y1="23" x2="104" y2="23" stroke="#d4dcdd"/><polyline fill="none" stroke="#51676c" stroke-width="1.7" points="${points}"/><circle cx="${x(values.length - 1)}" cy="${y(values[values.length - 1])}" r="2" fill="#216b78"/></svg>`;
+    }
+
+    function drawExceptions(parts) {
+      const records = parts.map((part) => ({ part, ...partMetrics(part) })).sort((left, right) => right.riskScore - left.riskScore);
+      const body = $("#exception-body");
+      body.innerHTML = records.map((record) => {
+        const selected = record.part.id === state.part;
+        const signalType = record.signal === "High risk" ? "high" : record.signal === "Watch" ? "watch" : "good";
+        const varianceClass = record.variance < 0 ? "numeric-negative" : "numeric-positive";
+        return `<tr tabindex="0" data-part="${record.part.id}" class="${selected ? "selected" : ""}">
+          <td><span class="part-id">${record.part.id}</span></td>
+          <td class="part-name">${record.part.name}</td>
+          <td><span class="status ${signalType}">${record.signal}</span></td>
+          <td>${formatUnits.format(record.currentForecast)}</td>
+          <td>${formatUnits.format(record.priorActual)}</td>
+          <td class="${varianceClass}">${formatPercent(record.variance)}</td>
+          <td>${record.wape.toFixed(1)}%</td>
+          <td>${sparkline(record.part)}</td>
+        </tr>`;
+      }).join("");
+      body.querySelectorAll("tr").forEach((row) => {
+        const selectRow = () => {
+          state.part = row.dataset.part;
+          $("#part-filter").value = state.part;
+          update();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        };
+        row.addEventListener("click", selectRow);
+        row.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") { event.preventDefault(); selectRow(); }
+        });
+      });
+      const attentionCount = records.filter((record) => record.signal !== "Stable").length;
+      $("#queue-summary").textContent = `${attentionCount} of ${records.length} displayed items need review.`;
+      return attentionCount;
+    }
+
+    function update() {
+      const parts = selectedParts();
+      const series = aggregateSeries(parts);
+      const metrics = metricFor(parts);
+      const attentionCount = drawExceptions(parts);
+      const wapeType = metrics.wape > 18 ? "watch" : "good";
+      const biasType = Math.abs(metrics.bias) > 4 ? "watch" : "good";
+      const riskType = attentionCount > 2 ? "high" : attentionCount > 0 ? "watch" : "good";
+      $("#wape-value").textContent = `${metrics.wape.toFixed(1)}%`;
+      setStatus($("#wape-status"), wapeType, metrics.wape > 18 ? "Above target" : "Within target");
+      $("#bias-value").textContent = formatPercent(metrics.bias);
+      setStatus($("#bias-status"), biasType, Math.abs(metrics.bias) > 4 ? "Review bias" : "Balanced");
+      $("#risk-value").textContent = attentionCount;
+      setStatus($("#risk-status"), riskType, attentionCount > 2 ? "High exposure" : attentionCount > 0 ? "Review" : "No exception");
+      const scope = state.part === "All" ? (state.family === "All" ? "All selected parts" : `${state.family} family`) : `${parts[0].id} | ${parts[0].name}`;
+      $("#trend-title").textContent = scope;
+      $("#filter-context").textContent = `${scope} | Actuals through Apr 2026 | Forecast horizon May-Jul 2026`;
+      $("[data-headline]").textContent = attentionCount > 2 ? "Forecast exceptions need a focused review." : attentionCount > 0 ? "Forecast performance is usable, with exceptions to review." : "Forecast performance is within tolerance.";
+      $("[data-summary]").textContent = attentionCount > 0 ? `${attentionCount} item${attentionCount === 1 ? "" : "s"} should be reviewed before supply commitments are released.` : "No displayed item exceeds the current review thresholds.";
+      $("#diagnostic-note").textContent = metrics.bias > 4 ? "The selected forecast is systematically high. Challenge assumptions before releasing excess supply." : metrics.bias < -4 ? "The selected forecast is systematically low. Review near-term supply coverage before shortages emerge." : "The selected forecast is broadly balanced. Review exceptions rather than changing the entire planning signal.";
+      drawModels(parts);
+      drawChart(series);
+    }
+
+    function downloadCsv() {
+      const parts = selectedParts();
+      const lines = [["Part", "Description", "Signal", "Current Forecast", "Prior Actual", "Variance %", "WAPE %"]];
+      parts.map((part) => ({ part, ...partMetrics(part) })).sort((a, b) => b.riskScore - a.riskScore).forEach((record) => {
+        lines.push([record.part.id, record.part.name, record.signal, record.currentForecast, record.priorActual, record.variance.toFixed(1), record.wape.toFixed(1)]);
+      });
+      const csv = lines.map((line) => line.map((value) => `"${String(value).replaceAll('"', '""')}"`).join(",")).join("\n");
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+      link.download = "demand-genie-exception-queue.csv";
+      link.click();
+      URL.revokeObjectURL(link.href);
+    }
+
+    populateFilters();
+    $("#family-filter").addEventListener("change", (event) => {
+      state.family = event.target.value;
+      if (state.part !== "All" && !selectedParts().some((part) => part.id === state.part)) {
+        state.part = "All";
+        $("#part-filter").value = "All";
+      }
+      update();
+    });
+    $("#part-filter").addEventListener("change", (event) => {
+      state.part = event.target.value;
+      if (state.part !== "All") {
+        state.family = PARTS.find((part) => part.id === state.part).family;
+        $("#family-filter").value = state.family;
+      }
+      update();
+    });
+    $("#model-filter").addEventListener("change", (event) => { state.model = event.target.value; update(); });
+    $("#download-csv").addEventListener("click", downloadCsv);
+    window.addEventListener("resize", () => drawChart(aggregateSeries(selectedParts())));
+    update();
+  </script>
+</body>
+</html>

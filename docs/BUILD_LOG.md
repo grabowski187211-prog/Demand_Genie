@@ -9,6 +9,15 @@ This file tracks timestamped project work for OpenAI Build Week.
 - Reviewed OpenAI Build Week rules and submission requirements through the Devpost Hackathons connector.
 - Added initial repository documentation for hackathon tracking.
 
+## 2026-07-21 13:22 CEST
+
+- Researched Stephen Few's dashboard-design guidance from Perceptual Edge primary sources, including dashboard purpose, single-screen monitoring, chart selection, color discipline, sparklines, and bullet graphs.
+- Created and validated the reusable global Codex skill `few-dashboard`, with a concise workflow and source reference notes.
+- Built the first Demand Genie MVP as a dependency-free interactive `index.html` dashboard using deterministic sample manufacturing demand data.
+- Implemented filters, actual-versus-forecast monitoring, model comparison, WAPE and bias context, a ranked exception queue, part-level drill-in, and CSV export.
+- Verified JavaScript parsing and inspected the dashboard through local desktop and narrow-viewport browser screenshots.
+- Used Few's principles to favor a one-screen monitoring hierarchy, flat visual treatment, direct comparisons, and color reserved for meaningful planning signals.
+
 ## Codex Collaboration Notes
 
 Add entries here as major features are designed and built. Include:

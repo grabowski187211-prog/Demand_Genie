@@ -26,7 +26,25 @@ The Devpost submission requires:
 
 ## Development
 
-Implementation instructions will be added once the product scope and technical stack are selected.
+The current MVP is a dependency-free, interactive dashboard in [index.html](index.html). It runs locally without a build step or server:
+
+1. Open `index.html` in a modern browser.
+2. Use the product-family, part, and forecast-model controls to change the monitoring view.
+3. Select a row in the exception queue to inspect that part's historical demand and forecast context.
+4. Download the current exception queue as CSV when needed.
+
+The dashboard currently uses deterministic sample manufacturing data embedded in the file. It is intentionally structured so an ERP or planning-system extract can replace the sample dataset in a later iteration.
+
+### Dashboard Design
+
+The dashboard follows the monitoring and visual-communication principles of Stephen Few's *Information Dashboard Design*:
+
+- A single desktop-screen overview for rapid monitoring.
+- Context-rich comparisons rather than isolated KPI tiles.
+- Line charts for time, compact forecast comparisons, and a ranked exception queue for follow-up work.
+- Flat, restrained visual treatment with color reserved for meaningful planning signals.
+
+The reusable Codex skill `few-dashboard` contains the implementation workflow and primary-source research notes used for these choices.
 
 ## Build Log
 
