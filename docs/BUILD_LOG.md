@@ -18,6 +18,13 @@ This file tracks timestamped project work for OpenAI Build Week.
 - Verified JavaScript parsing and inspected the dashboard through local desktop and narrow-viewport browser screenshots.
 - Used Few's principles to favor a one-screen monitoring hierarchy, flat visual treatment, direct comparisons, and color reserved for meaningful planning signals.
 
+## 2026-07-21 13:33 CEST
+
+- Added a deterministic synthetic demand-history generator and workbook for the planned Excel-upload workflow.
+- Generated 36 complete months of data from July 2023 through June 2026 across 10 product groups and 80 SKUs.
+- Included a tidy `Demand_Data` upload sheet with 2,880 monthly records, plus a business-friendly demand matrix, product master, and data dictionary.
+- Validated product-group count, SKU count, monthly coverage, and positive demand values after workbook generation.
+
 ## Codex Collaboration Notes
 
 Add entries here as major features are designed and built. Include:

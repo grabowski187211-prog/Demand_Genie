@@ -35,6 +35,21 @@ The current MVP is a dependency-free, interactive dashboard in [index.html](inde
 
 The dashboard currently uses deterministic sample manufacturing data embedded in the file. It is intentionally structured so an ERP or planning-system extract can replace the sample dataset in a later iteration.
 
+## Sample Data
+
+[Demand_Genie_Synthetic_Demand_History.xlsx](data/Demand_Genie_Synthetic_Demand_History.xlsx) contains 36 complete months of synthetic manufacturing demand history, covering July 2023 through June 2026.
+
+- 10 product groups with 8 SKUs each.
+- 2,880 tidy monthly demand records in the `Demand_Data` sheet. This is the intended dashboard-upload sheet.
+- A wide `Demand_Matrix` sheet, product master, data dictionary, and workbook notes for inspection.
+- Deterministic demand patterns with trend, seasonality, volatility, shocks, and intermittent behavior. No row represents real products or customers.
+
+Regenerate the workbook with:
+
+```bash
+python3 scripts/generate_synthetic_demand_data.py
+```
+
 ### Dashboard Design
 
 The dashboard follows the monitoring and visual-communication principles of Stephen Few's *Information Dashboard Design*:
